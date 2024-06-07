@@ -7,7 +7,7 @@
         {
             "type": "probe-rs-debug",
             "request": "launch",
-            "name": "probe-stm32f401re-examples",
+            "name": "debug-probe-stm32f401re",
             "cwd": "${workspaceFolder}",
             "connectUnderReset": true,
             "chip": "STM32F401RETx",
@@ -41,7 +41,46 @@
                 }
             ],
             "consoleLogLevel": "Info",
-            "preLaunchTask": "build stm32f401re",
+            "preLaunchTask": "build stm32f401re debug",
+        },
+        {
+            "type": "probe-rs-debug",
+            "request": "launch",
+            "name": "release-probe-stm32f401re",
+            "cwd": "${workspaceFolder}",
+            "connectUnderReset": true,
+            "chip": "STM32F401RETx",
+            "flashingConfig": {
+                "flashingEnabled": true,
+                "haltAfterReset": true,
+                "formatOptions": {
+                    "binaryFormat": "elf"
+                }
+            },
+            "coreConfigs": [
+                {
+                    "coreIndex": 0,
+                    "programBinary": "target/thumbv7em-none-eabi/debug/stm32f401_embassy",
+                    "svdFile": "STM32F401.svd",
+                    "rttEnabled": true,
+                    "rttChannelFormats": [
+                      {
+                        "channelNumber": 0,
+                        // Format RTT data as String data
+                        "dataFormat": "String",
+                        // Include host-side timestamps for every line of data transferred from the target RTT output
+                        "showTimestamps": true
+                      },
+                      {
+                        "channelNumber": 1,
+                        // Treat data as raw binary data, and do not format in any way
+                        "dataFormat": "BinaryLE"
+                      }
+                    ]
+                }
+            ],
+            "consoleLogLevel": "Info",
+            "preLaunchTask": "build stm32f401re release",
         }
     ]
 }

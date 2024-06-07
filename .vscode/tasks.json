@@ -11,7 +11,22 @@
                 // "--release"
             ],
             "group": "build",
-            "label": "build stm32f401re",
+            "label": "build stm32f401re debug",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+        },
+        {
+            "type": "cargo",
+            "command": "build",
+            "problemMatcher": [
+                "$rustc"
+            ],
+            "args": [
+                "--release"
+            ],
+            "group": "build",
+            "label": "build stm32f401re release",
             "options": {
                 "cwd": "${workspaceFolder}"
             },
