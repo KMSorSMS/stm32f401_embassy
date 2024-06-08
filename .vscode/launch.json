@@ -60,7 +60,7 @@
             "coreConfigs": [
                 {
                     "coreIndex": 0,
-                    "programBinary": "target/thumbv7em-none-eabi/debug/stm32f401_embassy",
+                    "programBinary": "target/thumbv7em-none-eabi/release/stm32f401_embassy",
                     "svdFile": "STM32F401.svd",
                     "rttEnabled": true,
                     "rttChannelFormats": [

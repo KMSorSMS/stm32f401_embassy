@@ -652,9 +652,11 @@ dependencies = [
  "defmt",
  "defmt-rtt",
  "embassy-executor",
+ "embassy-hal-internal",
  "embassy-stm32",
  "embassy-time",
  "panic-probe",
+ "stm32-metapac",
 ]
 
 [[package]]
