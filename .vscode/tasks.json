@@ -30,6 +30,32 @@
             "options": {
                 "cwd": "${workspaceFolder}"
             },
-        }
+        },
+        // {
+        //     "label": "Set RUST_GDB",
+        //     "type": "shell",
+        //     "command": "export PATH=\"${PATH}:/home/liam/download/defmt/target/release\" && sleep 3 &&  zsh -c \"make defmt\"",
+        //     "problemMatcher": [],
+        //     "group": {
+        //         "kind": "build",
+        //         "isDefault": true
+        //     }
+        // },
+        // {
+        //     "label": "build stm32f401re release gdb",
+        //     "dependsOn": [
+        //         "Set RUST_GDB",
+        //         "build stm32f401re release"
+        //     ],
+        //     "dependsOrder": "sequence"
+        // },
+        // {
+        //     "label": "build stm32f401re debug gdb",
+        //     "dependsOn": [
+        //         "Set RUST_GDB",
+        //         "build stm32f401re debug"
+        //     ],
+        //     "dependsOrder": "sequence"
+        // }
     ]
 }

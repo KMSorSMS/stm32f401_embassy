@@ -1,86 +1,150 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "type": "probe-rs-debug",
-            "request": "launch",
-            "name": "debug-probe-stm32f401re",
-            "cwd": "${workspaceFolder}",
-            "connectUnderReset": true,
-            "chip": "STM32F401RETx",
-            "flashingConfig": {
-                "flashingEnabled": true,
-                "haltAfterReset": true,
-                "formatOptions": {
-                    "binaryFormat": "elf"
-                }
-            },
-            "coreConfigs": [
-                {
-                    "coreIndex": 0,
-                    "programBinary": "target/thumbv7em-none-eabi/debug/stm32f401_embassy",
-                    "svdFile": "STM32F401.svd",
-                    "rttEnabled": true,
-                    "rttChannelFormats": [
-                      {
-                        "channelNumber": 0,
-                        // Format RTT data as String data
-                        "dataFormat": "String",
-                        // Include host-side timestamps for every line of data transferred from the target RTT output
-                        "showTimestamps": true
-                      },
-                      {
-                        "channelNumber": 1,
-                        // Treat data as raw binary data, and do not format in any way
-                        "dataFormat": "BinaryLE"
-                      }
-                    ]
-                }
-            ],
-            "consoleLogLevel": "Info",
-            "preLaunchTask": "build stm32f401re debug",
-        },
-        {
-            "type": "probe-rs-debug",
-            "request": "launch",
-            "name": "release-probe-stm32f401re",
-            "cwd": "${workspaceFolder}",
-            "connectUnderReset": true,
-            "chip": "STM32F401RETx",
-            "flashingConfig": {
-                "flashingEnabled": true,
-                "haltAfterReset": true,
-                "formatOptions": {
-                    "binaryFormat": "elf"
-                }
-            },
-            "coreConfigs": [
-                {
-                    "coreIndex": 0,
-                    "programBinary": "target/thumbv7em-none-eabi/release/stm32f401_embassy",
-                    "svdFile": "STM32F401.svd",
-                    "rttEnabled": true,
-                    "rttChannelFormats": [
-                      {
-                        "channelNumber": 0,
-                        // Format RTT data as String data
-                        "dataFormat": "String",
-                        // Include host-side timestamps for every line of data transferred from the target RTT output
-                        "showTimestamps": true
-                      },
-                      {
-                        "channelNumber": 1,
-                        // Treat data as raw binary data, and do not format in any way
-                        "dataFormat": "BinaryLE"
-                      }
-                    ]
-                }
-            ],
-            "consoleLogLevel": "Info",
-            "preLaunchTask": "build stm32f401re release",
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "probe-rs-debug",
+      "request": "launch",
+      "name": "debug-probe-stm32f401re",
+      "cwd": "${workspaceFolder}",
+      "connectUnderReset": true,
+      "chip": "STM32F401RETx",
+      "flashingConfig": {
+        "flashingEnabled": true,
+        "haltAfterReset": true,
+        "formatOptions": {
+          "binaryFormat": "elf"
         }
-    ]
+      },
+      "coreConfigs": [
+        {
+          "coreIndex": 0,
+          "programBinary": "target/thumbv7em-none-eabi/debug/stm32f401_embassy",
+          "svdFile": "STM32F401.svd",
+          "rttEnabled": true,
+          "rttChannelFormats": [
+            {
+              "channelNumber": 0,
+              // Format RTT data as String data
+              "dataFormat": "String",
+              // Include host-side timestamps for every line of data transferred from the target RTT output
+              "showTimestamps": true
+            },
+            {
+              "channelNumber": 1,
+              // Treat data as raw binary data, and do not format in any way
+              "dataFormat": "BinaryLE"
+            }
+          ]
+        }
+      ],
+      "consoleLogLevel": "Info",
+      "preLaunchTask": "build stm32f401re debug",
+    },
+    {
+      "type": "probe-rs-debug",
+      "request": "launch",
+      "name": "release-probe-stm32f401re",
+      "cwd": "${workspaceFolder}",
+      "connectUnderReset": true,
+      "chip": "STM32F401RETx",
+      "flashingConfig": {
+        "flashingEnabled": true,
+        "haltAfterReset": true,
+        "formatOptions": {
+          "binaryFormat": "elf"
+        }
+      },
+      "coreConfigs": [
+        {
+          "coreIndex": 0,
+          "programBinary": "target/thumbv7em-none-eabi/release/stm32f401_embassy",
+          "svdFile": "STM32F401.svd",
+          "rttEnabled": true,
+          "rttChannelFormats": [
+            {
+              "channelNumber": 0,
+              // Format RTT data as String data
+              "dataFormat": "String",
+              // Include host-side timestamps for every line of data transferred from the target RTT output
+              "showTimestamps": true
+            },
+            {
+              "channelNumber": 1,
+              // Treat data as raw binary data, and do not format in any way
+              "dataFormat": "BinaryLE"
+            }
+          ]
+        }
+      ],
+      "consoleLogLevel": "Info",
+      "preLaunchTask": "build stm32f401re release",
+    },
+    {
+      "cwd": "${workspaceRoot}",
+      "name": "release cortex Debug",
+      // build latest firmware first!
+      "preLaunchTask": "build stm32f401re release",
+      "request": "launch",
+      "type": "cortex-debug",
+      "servertype": "openocd",
+      "gdbTarget": ":3333",
+      "runToEntryPoint": "main",
+      // TODO adjust all these to fit your system, program and hardware
+      "executable": "target/thumbv7em-none-eabi/release/stm32f401_embassy",
+      "svdFile": "STM32F401.svd", // optional
+      "gdbPath": "gdb-multiarch", // or gdb or multiarch-gdb
+      // NOTE requires openOCD 0.11.0+
+      // "postLaunchCommands": [
+      //     "monitor rtt server start 8765 0",
+      //     // should span the *right* part of RAM
+      //     "monitor rtt setup 0x2003fbc8 0x30 \"SEGGER RTT\"",
+      //     "monitor rtt start",
+      // ],
+      "configFiles": [
+        // "interface/jlink.cfg",
+        "interface/stlink.cfg",
+        "target/stm32f4x.cfg"
+      ],
+      "postLaunchCommands": [
+        "monitor rtt server start 8765 0",
+        // should span the *right* part of RAM
+        "monitor rtt setup 0x20000000 0x30 \"SEGGER RTT\"",
+        "monitor rtt start",
+      ],
+    },
+    {
+      "cwd": "${workspaceRoot}",
+      "name": "debug cortex Debug",
+      // build latest firmware first!
+      "preLaunchTask": "build stm32f401re debug",
+      "request": "launch",
+      "type": "cortex-debug",
+      "servertype": "openocd",
+      "gdbTarget": ":3333",
+      "runToEntryPoint": "main",
+      // TODO adjust all these to fit your system, program and hardware
+      "executable": "target/thumbv7em-none-eabi/debug/stm32f401_embassy",
+      "svdFile": "STM32F401.svd", // optional
+      "gdbPath": "gdb-multiarch", // or gdb or multiarch-gdb
+      "configFiles": [
+        // "interface/jlink.cfg",
+        "interface/stlink.cfg",
+        "target/stm32f4x.cfg"
+      ],
+      "postLaunchCommands": [
+        "monitor rtt server start 8765 0",
+        // should span the *right* part of RAM
+        "monitor rtt setup 0x20000000 0x30 \"SEGGER RTT\"",
+        "monitor rtt start",
+      ],
+      // .. so use this instead of the interface in `configFiles`
+      // "openOCDPreConfigLaunchCommands": [
+      //     "source [find interface/jlink.cfg]",
+      //     "transport select swd",
+      // ],
+    },
+  ]
 }

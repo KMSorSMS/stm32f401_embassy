@@ -41,3 +41,5 @@ clean:
 	cargo clean
 run:
 	cargo run $(MODE_ARG)
+defmt:
+	zsh -c "nc localhost $(PORT) | defmt-print -e $(FILE_ELF) "
