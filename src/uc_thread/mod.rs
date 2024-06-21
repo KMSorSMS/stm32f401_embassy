@@ -5,12 +5,12 @@ use types::{OSTCBPrio, OSTCBPtr, OsStkPtr, OSPRIOBIT};
 
 #[repr(C)]
 #[allow(unused)]
-struct OsTCB {
+struct OsTCB<'a> {
     /// stack pointer contains the basic register info
-    sp: OsStkPtr,
+    sp: OsStkPtr<'a>,
     /// to make it a double linked list,need OSTCBNext and OSTCBPre
-    ostcb_next: Option<OSTCBPtr>,
-    ostcb_pre: Option<OSTCBPtr>,
+    ostcb_next: Option<OSTCBPtr<'a>>,
+    ostcb_pre: Option<OSTCBPtr<'a>>,
     /// the priority of the thread
     os_prio: OSTCBPrio,
     /// to accomplish the real-time requirement, adding bit map

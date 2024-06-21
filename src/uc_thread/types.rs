@@ -1,11 +1,12 @@
 use super::OsTCB;
 
-pub type OSTCBPtr = &'static OsTCB;
+pub type OSTCBPtr<'a> = &'a OsTCB<'a>;
 pub type OSTCBPrio = u8;
 pub type OSPRIOBIT = u8;
 // 32 bit machine, the register bit is 32bit
 pub type OsStk = u32;
-pub type OsStkPtr = u32;
+pub type OsStkPtr<'a> = &'a OsStk;
+const OS_LOWEST_PRIO: u32 = 63;
 
 /// define error state related to os
 /*
