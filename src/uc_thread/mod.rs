@@ -1,8 +1,10 @@
 //! the basic structure for thread,like TCB and stack
 mod types;
+mod os_task;
 use types::{OSTCBPrio, OSTCBPtr, OsStkPtr, OSPRIOBIT};
 
 #[repr(C)]
+#[allow(unused)]
 struct OsTCB {
     /// stack pointer contains the basic register info
     sp: OsStkPtr,
