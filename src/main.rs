@@ -1,7 +1,9 @@
 #![no_std]
 #![no_main]
 // #![feature(impl_trait_in_assoc_type)]
+// the rust version of uc's thread part
 
+pub mod uc_thread;
 use defmt::*;
 use embassy_executor::Spawner;
 use embassy_stm32::{
@@ -13,35 +15,6 @@ use stm32_metapac::rcc::vals;
 use {defmt_rtt as _, panic_probe as _};
 #[embassy_executor::main]
 async fn main(_spawner: Spawner) {
-    // embassy_stm32::rcc::Config {
-    //     hsi: false,
-    //     hse,
-    //     sys: vals::Sw::PLL1_P, // use pll as sys
-    //     pll_src: vals::Pllsrc::HSE,
-    //     //the division number is:PLLM=4, PLLN=84, PLLP=2, PLLQ=4
-    //     pll,
-    //     plli2s: None,
-    //     // apb1_div=2 apb2_div=1
-    //     ahb_pre: vals::Hpre::DIV1,
-    //     apb1_pre: vals::Ppre::DIV2,
-    //     apb2_pre: vals::Ppre::DIV2,
-    //     // // low speed clock just use the default
-    //     // ls: Default::default(),
-    //     // // let the mux choose the pllclk
-    //     // mux: Default::default(),
-    //     ..Default::default()
-    // };
-
-    // embassy_stm32::Config {
-    //     rcc,
-    //     enable_debug_during_sleep:true,
-    //     dma_interrupt_priority: Priority::P0,
-    //     ..Default::default()
-    // };
-    // try to set my peripheral init
-
-    // let p = embassy_stm32::init(Default::default());
-    // we use 84Mhz sys from 8Mhz HSE with
     let hse = Some(embassy_stm32::rcc::Hse {
         freq: embassy_stm32::time::Hertz(8_000_000),
         mode: embassy_stm32::rcc::HseMode::Oscillator,
