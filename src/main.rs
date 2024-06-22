@@ -4,6 +4,7 @@
 // the rust version of uc's thread part
 
 pub mod uc_thread;
+mod sync;
 use defmt::*;
 use embassy_executor::Spawner;
 use embassy_stm32::{
