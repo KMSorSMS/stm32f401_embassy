@@ -1,10 +1,11 @@
 //! the basic structure for thread,like TCB and stack
-mod types;
 mod os_task;
+mod types;
 use types::{OSTCBPrio, OSTCBPtr, OsStkPtr, OSPRIOBIT};
 
 #[repr(C)]
 #[allow(unused)]
+#[derive(Clone, Copy)]
 struct OsTCB<'a> {
     /// stack pointer contains the basic register info
     sp: OsStkPtr<'a>,
@@ -17,3 +18,14 @@ struct OsTCB<'a> {
     os_tcb_bitx: OSPRIOBIT,
     os_tcb_bity: OSPRIOBIT,
 }
+
+/// create a static OSTCB linked list
+#[allow(unused)]
+static mut OSTCBTBL: [OsTCB; 64] = [OsTCB {
+    sp: &0,
+    ostcb_next: None,
+    ostcb_pre: None,
+    os_prio: 0,
+    os_tcb_bitx: 0,
+    os_tcb_bity: 0,
+}; 64];
