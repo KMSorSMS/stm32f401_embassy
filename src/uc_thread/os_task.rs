@@ -1,4 +1,5 @@
 //! OS task/thread abstraction
+use super::os_core::os_tcb_init;
 use super::{OSINT_NESTING, OS_TCB_PRIO_TBL};
 use super::os_cpu::ostask_stk_init;
 use super::types::{OSTCBPrio, OsErrState, OsStkPtr, Task};
@@ -21,7 +22,7 @@ pub fn os_task_create(task: Task, ptos: OsStkPtr, prio: OSTCBPrio) -> OsErrState
         // we call the OSTaskStkInit function to initialize the task's stack
         let psp = ostask_stk_init(task, ptos);
         // with this psp we will init our tcb
-
+        let err = os_tcb_init(prio,psp);
     }
     OsErrState::OsErrNone
 }

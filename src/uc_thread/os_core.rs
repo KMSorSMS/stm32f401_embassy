@@ -1,4 +1,6 @@
 //! The core of the uC/OS-II
+use types::OsErrState;
+
 #[allow(unused_imports)]
 use super::*;
 /// initialize the internals of uC/OS-II
@@ -15,6 +17,14 @@ pub fn os_init(){
 #[allow(unused)]
  pub fn os_start(){
 
+}
+
+/// init the tcb
+#[allow(unused)]
+pub fn os_tcb_init(prio: OSTCBPrio, ptos: OsStkPtr) -> OsErrState {
+    
+    OsErrState::OsErrNone
+    
 }
 
 /// To be done
@@ -73,7 +83,3 @@ fn os_init_task_idle(){
     
 }
 
-/// init the tcb
-fn os_tcb_init(prio: OSTCBPrio, ptos: OsStkPtr) {
-    
-}
