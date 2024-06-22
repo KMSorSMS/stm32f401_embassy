@@ -1,12 +1,12 @@
-use super::OsTCB;
+use super::{OsTCB, CONTEXT_STACK_SIZE};
 
 pub type OSTCBPtr<'a> = &'a OsTCB<'a>;
 pub type OSTCBPrio = u8;
 pub type OSPRIOBIT = u8;
 // 32 bit machine, the register bit is 32bit
 pub type OsStk = u32;
-pub type OsStkPtr<'a> = &'a OsStk;
-const OS_LOWEST_PRIO: u32 = 63;
+pub type OsStkPtr = *mut OsStk;
+pub type Task = fn();
 
 /// define error state related to os
 /*
