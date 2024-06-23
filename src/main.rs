@@ -2,7 +2,6 @@
 #![no_main]
 // #![feature(impl_trait_in_assoc_type)]
 // the rust version of uc's thread part
-
 pub mod uc_thread;
 use defmt::*;
 use embassy_executor::Spawner;
@@ -12,6 +11,7 @@ use embassy_stm32::{
 };
 use embassy_time::Timer;
 use stm32_metapac::rcc::vals;
+
 use {defmt_rtt as _, panic_probe as _};
 #[embassy_executor::main]
 async fn main(_spawner: Spawner) {
