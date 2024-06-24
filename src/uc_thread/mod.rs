@@ -4,16 +4,17 @@ mod os_cpu;
 mod os_task;
 mod types;
 
-use core::ptr::{addr_of, addr_of_mut};
+use core::ptr::addr_of_mut;
 
 pub use types::{OSTCBPrio, OSTCBPtr, OsStk, OsStkPtr, OSPRIOBIT};
 pub use os_core::{os_init, os_start};
 pub use os_task::os_task_create;
+pub use os_cpu::systick_init;
 
 #[repr(C)]
 #[allow(unused)]
 #[derive(Clone, Copy)]
-struct OsTCB {
+pub struct OsTCB {
     /// stack pointer contains the basic register info
     sp: OsStkPtr,
     /// to make it a double linked list,need OSTCBNext and OSTCBPre
@@ -159,7 +160,7 @@ static mut OS_IS_RUNNING: bool = false;
 // static mut OS_TIME: u32 = 0;
 // the tick num of a time slice
 #[allow(unused)]
-const OS_TICKS_PER_SLICE:usize=1000;
+const OS_TICKS_PER_SEC:usize=1000;
 
 /********************************************************************************
                             Stack Size & Stack

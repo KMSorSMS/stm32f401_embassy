@@ -1,5 +1,5 @@
-use super::{types::{ OsStkPtr, Task}, CONTEXT_STACK_SIZE};
-
+use super::{types::{ OsStkPtr, Task}, CONTEXT_STACK_SIZE, OS_TICKS_PER_SEC};
+use cortex_m::{peripheral::{SCB, SYST}, Peripherals};
 /// the context structure store in stack
 #[repr(C,align(8))]
 struct UcStk {
@@ -50,4 +50,25 @@ pub fn ostask_stk_init(task: Task,ptos:OsStkPtr)-> OsStkPtr {
         (*psp).xpsr = 0x01000000;
     }
     psp as OsStkPtr
+}
+
+
+pub fn systick_init(cpu_freq: usize){
+    let cnts: u32 = (cpu_freq / OS_TICKS_PER_SEC) as u32;
+    let mut p = Peripherals::take().unwrap();
+    // get the register block of systick
+    let mut stk = p.SYST;
+    // set the reload val
+    stk.set_reload(cnts-1);
+    // set the systick handler prio this need to use the register:SCB_SHPRI3
+    unsafe { p.SCB.set_priority(cortex_m::peripheral::scb::SystemHandler::SysTick,2) };
+
+    // clear the current value
+    stk.clear_current();
+    // set the source of the systick
+    // SYST::set_clock_source(SystClkSource::External);
+    // enable the timer interrupt
+    stk.enable_interrupt();
+    // enable the systick
+    stk.enable_counter();
 }

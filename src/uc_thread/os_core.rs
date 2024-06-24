@@ -19,7 +19,6 @@ extern "C" {
 /// initialize the internals of uC/OS-II
 #[allow(unused)]
 pub fn os_init() {
-    os_init_hook_begin();
     os_init_tcblist();
     os_init_event_list();
     os_mem_init();
@@ -151,11 +150,6 @@ fn os_int_exit() {
 /// maybe no need?
 #[allow(unused)]
 fn os_time_tick() {}
-
-/// To be done
-fn os_init_hook_begin() {
-    // clear the exception stack
-}
 
 /// init the TCB list(OS_TCB_FREE_LIST&OS_TCB_LIST)
 fn os_init_tcblist() {

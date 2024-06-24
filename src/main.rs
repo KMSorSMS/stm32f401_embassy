@@ -17,7 +17,7 @@ use embassy_stm32::{
 use embassy_time::Timer;
 use static_cell::StaticCell;
 use stm32_metapac::rcc::vals;
-use uc_thread::{os_init, os_start, os_task_create, OsStk};
+use uc_thread::{os_init, os_start, os_task_create, systick_init, OsStk};
 
 use {defmt_rtt as _, panic_probe as _};
 static EXECUTOR_LOW1: StaticCell<Executor> = StaticCell::new();
@@ -57,17 +57,19 @@ fn main() -> ! {
 
     let mut config = embassy_stm32::Config::default();
     config.rcc = rcc;
-    systick_init();
+    let _p = embassy_stm32::init(config);
+    systick_init(84000000);
     info!("Hello World!");
     os_init();
     os_task_create(task_1, unsafe { TASK1_STK_PTR }, 10);
-    os_task_create(task_2, unsafe { TASK2_STK_PTR }, 10);
+    os_task_create(task_2, unsafe { TASK2_STK_PTR }, 11);
     os_start()
 }
 
 fn task_1() {
     let executor = EXECUTOR_LOW1.init(Executor::new());
     executor.run(|spawner| {
+        unwrap!(spawner.spawn(blink2()));
         unwrap!(spawner.spawn(blink1()));
     });
 }
@@ -75,7 +77,7 @@ fn task_1() {
 fn task_2() {
     let executor = EXECUTOR_LOW2.init(Executor::new());
     executor.run(|spawner| {
-        unwrap!(spawner.spawn(blink2()));
+        unwrap!(spawner.spawn(blink3()));
     });
 }
 
@@ -105,4 +107,15 @@ async fn blink2() {
     }
 }
 
-fn systick_init() {}
+#[embassy_executor::task]
+async fn blink3() {
+    loop {
+        info!("high3");
+        // led.set_high();
+        Timer::after_millis(300).await;
+
+        info!("low3");
+        // led.set_low();
+        Timer::after_millis(300).await;
+    }
+}
