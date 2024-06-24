@@ -29,6 +29,9 @@ static mut TASK1_STK: [OsStk; TASK1_STK_SIZE] = [0; TASK1_STK_SIZE];
 static mut TASK1_STK_PTR: *mut OsStk = unsafe { addr_of_mut!(TASK1_STK[0]) };
 static mut TASK2_STK: [OsStk; TASK2_STK_SIZE] = [0; TASK2_STK_SIZE];
 static mut TASK2_STK_PTR: *mut OsStk = unsafe { addr_of_mut!(TASK2_STK[0]) };
+#[allow(unused)]
+static mut OS_CPU_EXCEPT_STK_BASE: [OsStk; TASK2_STK_SIZE] = [0; TASK2_STK_SIZE];
+
 
 #[entry]
 fn main() -> ! {

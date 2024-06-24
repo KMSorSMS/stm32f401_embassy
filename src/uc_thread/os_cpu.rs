@@ -1,5 +1,10 @@
-use super::{types::{ OsStkPtr, Task}, CONTEXT_STACK_SIZE, OS_TICKS_PER_SEC};
+
+use core::arch::asm;
+
+use super::{os_core::{os_int_enter, os_int_exit}, types::{ OsStkPtr, Task}, CONTEXT_STACK_SIZE, OS_IS_RUNNING, OS_TICKS_PER_SEC};
 use cortex_m::{peripheral::{SCB, SYST}, Peripherals};
+use cortex_m_rt::exception;
+extern crate cortex_m_rt;
 /// the context structure store in stack
 #[repr(C,align(8))]
 struct UcStk {
@@ -21,7 +26,6 @@ struct UcStk {
     lr: u32,
     pc: u32,
     xpsr: u32,
-
 }
 
 /// initialize the stack of the task :simulation push
@@ -71,4 +75,30 @@ pub fn systick_init(cpu_freq: usize){
     stk.enable_interrupt();
     // enable the systick
     stk.enable_counter();
+}
+
+/// the systick handler
+/// the func is not pub for the requirement of the exception
+#[exception]
+fn SysTick(){
+    os_int_enter();
+    ostime_tick();
+    os_int_exit();
+}
+
+/// the tick func of the os. In this func the 
+/// If the func is called, there MUST be a scheduling point.
+#[inline]
+fn ostime_tick(){
+    // wake up the MCU(maybe the MCU is not in low power mode anyway)
+    // In blinky, though sev instruction is called, the ISR will be executed continue.
+    // Maybe it is because the cs?
+    // there are two situation that this func is called:
+    // 1. there is no thread to run (now the MCU should be in low power mode)
+    // 2. there is still some threads can be sheduled, but the MCU is in low power mode. at this time, we should wake up the MCU.
+    // But we consider that the wfe time is also the time of the thread.
+    critical_section::with(|_cs|{
+        unsafe{asm!("sev")};
+    });
+    // there is nothing to do. I will chage the scheduling algorithm in os_sched
 }

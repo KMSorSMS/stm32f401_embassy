@@ -1,11 +1,14 @@
-    .extern  OSTaskSwHook
-    .extern  OS_CPU_ExceptStkBase
-    .extern  OS_KA_BASEPRI_Boundary
-    .extern  OSTCBHighrdy
+    @ .extern  OSTaskSwHook
+    .extern  OS_CPU_EXCEPT_STK_BASE
+    @ .extern  OS_KA_BASEPRI_Boundary
+    .extern  OS_TCB_HIGH_RDY
+    .extern OS_TCB_CUR
+    .extern OS_PRIO_CUR
+    .extern OS_PRIO_HIGH_RDY
     
     .global  OSStartHighRdy                                     @ Functions declared in this file
-    .global  OS_CPU_SR_Save
-    .global  OS_CPU_SR_Restore  
+    @ .global  OS_CPU_SR_Save
+    @ .global  OS_CPU_SR_Restore  
     .global  OSIntCtxSw
     .global  OSCtxSw
     .global  PendSV_Handler
@@ -34,27 +37,27 @@ OSIntCtxSw:
     BX      LR
 
 
-.thumb_func
-OS_CPU_SR_Save:
-    CPSID   I                                   @ Cortex-M7 errata notice. See Note #2
-    PUSH   {R1}
-    MRS     R1, BASEPRI
-    MSR     BASEPRI, R0
-    DSB
-    ISB
-    MOV     R0, R1
-    POP    {R1}
-    CPSIE   I
-    BX      LR
+@ .thumb_func
+@ OS_CPU_SR_Save:
+@     CPSID   I                                   @ Cortex-M7 errata notice. See Note #2
+@     PUSH   {R1}
+@     MRS     R1, BASEPRI
+@     MSR     BASEPRI, R0
+@     DSB
+@     ISB
+@     MOV     R0, R1
+@     POP    {R1}
+@     CPSIE   I
+@     BX      LR
 
-.thumb_func
-OS_CPU_SR_Restore:
-    CPSID   I                                   @ Cortex-M7 errata notice. See Note #2
-    MSR     BASEPRI, R0
-    DSB
-    ISB
-    CPSIE   I
-    BX      LR
+@ .thumb_func
+@ OS_CPU_SR_Restore:
+@     CPSID   I                                   @ Cortex-M7 errata notice. See Note #2
+@     MSR     BASEPRI, R0
+@     DSB
+@     ISB
+@     CPSIE   I
+@     BX      LR
 
 @ Note(s) : 1) PendSV is used to cause a context switch.  This is a recommended method for performing
 @              context switches with Cortex-M.  This is because the Cortex-M auto-saves half of the
@@ -70,54 +73,54 @@ OS_CPU_SR_Restore:
 PendSV_Handler:
 @ 中断屏蔽
     CPSID   I                                                   @ Cortex-M7 errata notice. See Note #5
-    MOVW    R2, #:lower16:OS_KA_BASEPRI_Boundary                @ Set BASEPRI priority level required for exception preemption
-    MOVT    R2, #:upper16:OS_KA_BASEPRI_Boundary
-    LDR     R1, [R2]
-    MSR     BASEPRI, R1
-    DSB
-    ISB
-    CPSIE   I
+    @ MOVW    R2, #:lower16:OS_KA_BASEPRI_Boundary                @ Set BASEPRI priority level required for exception preemption
+    @ MOVT    R2, #:upper16:OS_KA_BASEPRI_Boundary
+    @ LDR     R1, [R2]
+    @ MSR     BASEPRI, R1
+    @ DSB
+    @ ISB
+    @ CPSIE   I
 @ 保存当前任务的上下文,这里PSP是任务的堆栈指针,只需要存储R4-R11,R14
     MRS     R0, PSP                                             @ PSP is process stack pointer
     STMFD   R0!, {R4-R11, R14}                                  @ Save remaining regs r4-11, R14 on process stack
 @ 存储当前任务的堆栈指针到任务的TCB的Ptr位置
-    @ MOVW    R5, #:lower16:OSTCBCur                              @ OSTCBCur->OSTCBStkPtr = SP;
-    @ MOVT    R5, #:upper16:OSTCBCur
+    @ MOVW    R5, #:lower16:OS_TCB_CUR                              @ OS_TCB_CUR->OSTCBStkPtr = SP;
+    @ MOVT    R5, #:upper16:OS_TCB_CUR
     @ 我认为可以用下面这句来代替上面两句
-    LDR     R5, =OSTCBCur
+    LDR     R5, =OS_TCB_CUR
     LDR     R1, [R5]
-    STR     R0, [R1]                                            @ R0 is SP of process being switched out 这里很有趣，因为OSTCBStkPtr正好是OSTCBCur的第一个元素
+    STR     R0, [R1]                                            @ R0 is SP of process being switched out 这里很有趣，因为OSTCBStkPtr正好是OS_TCB_CUR的第一个元素
 
                                                                 @ At this point, entire context of process has been saved
     MOV     R4, LR                                              @ Save LR exc_return value
-    BL      OSTaskSwHook                                        @ Call OSTaskSwHook() for FPU Push & Pop
+    @ BL      OSTaskSwHook                                        @ Call OSTaskSwHook() for FPU Push & Pop
 @   这里就是使用:lower16把目标数据拆开成两个部分高低16位
-    @ MOVW    R0, #:lower16:OSPrioCur                             @ OSPrioCur   = OSPrioHighRdy;
-    @ MOVT    R0, #:upper16:OSPrioCur
-    @ MOVW    R1, #:lower16:OSPrioHighRdy
-    @ MOVT    R1, #:upper16:OSPrioHighRdy
-    @ 转换当前的运行优先级,变成找出的OSPrioHighRdy
-    LDR     R0, =OSPrioCur
-    LDR     R1, =OSPrioHighRdy
+    @ MOVW    R0, #:lower16:OS_PRIO_CUR                             @ OS_PRIO_CUR   = OS_PRIO_HIGH_RDY;
+    @ MOVT    R0, #:upper16:OS_PRIO_CUR
+    @ MOVW    R1, #:lower16:OS_PRIO_HIGH_RDY
+    @ MOVT    R1, #:upper16:OS_PRIO_HIGH_RDY
+    @ 转换当前的运行优先级,变成找出的OS_PRIO_HIGH_RDY
+    LDR     R0, =OS_PRIO_CUR
+    LDR     R1, =OS_PRIO_HIGH_RDY
     LDRB    R2, [R1]
     STRB    R2, [R0]
 
-    @ MOVW    R1, #:lower16:OSTCBHighRdy                          @ OSTCBCur  = OSTCBHighRdy;
-    @ MOVT    R1, #:upper16:OSTCBHighRdy
-    LDR     R1, =OSTCBHighRdy
+    @ MOVW    R1, #:lower16:OS_TCB_HIGH_RDY                          @ OS_TCB_CUR  = OS_TCB_HIGH_RDY;
+    @ MOVT    R1, #:upper16:OS_TCB_HIGH_RDY
+    LDR     R1, =OS_TCB_HIGH_RDY
     LDR     R2, [R1]
     STR     R2, [R5]
 
     ORR     LR,  R4, #0x04                                      @ Ensure exception return uses process stack
-    LDR     R0,  [R2]                                           @ R0 is new process SP; SP = OSTCBHighRdy->OSTCBStkPtr;
+    LDR     R0,  [R2]                                           @ R0 is new process SP; SP = OS_TCB_HIGH_RDY->OSTCBStkPtr;
     LDMFD   R0!, {R4-R11, R14}                                  @ Restore r4-11, R14 from new process stack
     MSR     PSP, R0                                             @ Load PSP with new process SP
 
     MOV     R2, #0                                              @ Restore BASEPRI priority level to 0
-    CPSID   I
-    MSR     BASEPRI, R2
-    DSB
-    ISB
+    @ CPSID   I
+    @ MSR     BASEPRI, R2
+    @ DSB
+    @ ISB
     CPSIE   I
     BX      LR                                                  @ Exception return will restore remaining context
 
@@ -131,11 +134,11 @@ PendSV_Handler:
 @           3) OSStartHighRdy() MUST:
 @              a) Setup PendSV exception priority to lowest;
 @              b) Set initial PSP to 0, to tell context switcher this is first run;
-@              c) Set the main stack to OS_CPU_ExceptStkBase
+@              c) Set the main stack to OS_CPU_EXCEPT_STK_BASE
 @              d) Set OSRunning to TRUE;
-@              e) Get current high priority, OSPrioCur = OSPrioHighRdy;
-@              f) Get current ready thread TCB, OSTCBCur = OSTCBHighRdy;
-@              g) Get new process SP from TCB, SP = OSTCBHighRdy->OSTCBStkPtr;
+@              e) Get current high priority, OS_PRIO_CUR = OS_PRIO_HIGH_RDY;
+@              f) Get current ready thread TCB, OS_TCB_CUR = OS_TCB_HIGH_RDY;
+@              g) Get new process SP from TCB, SP = OS_TCB_HIGH_RDY->OSTCBStkPtr;
 @              h) Restore R0-R11 and R14 from new process stack;
 @              i) Enable interrupts (tasks will run with interrupts enabled).
 
@@ -154,39 +157,39 @@ OSStartHighRdy:
 
     MOVS    R0, #0                                              @ Set the PSP to 0 for initial context switch call
     MSR     PSP, R0
-@ OS_CPU_ExceptStkBase是一个全局变量，用来存储异常堆栈的栈顶地址。栈向下增长
+@ OS_CPU_EXCEPT_STK_BASE是一个全局变量，用来存储异常堆栈的栈顶地址。栈向下增长
 @ 这里应该利用不了伪指令，因为这个地址是一个全局变量，不是一个常量，不过还是试一试
-    @ MOVW    R0, #:lower16:OS_CPU_ExceptStkBase                  @ Initialize the MSP to the OS_CPU_ExceptStkBase
-    @ MOVT    R0, #:upper16:OS_CPU_ExceptStkBase
-    LDR     R0, =OS_CPU_ExceptStkBase
+    @ MOVW    R0, #:lower16:OS_CPU_EXCEPT_STK_BASE                  @ Initialize the MSP to the OS_CPU_EXCEPT_STK_BASE
+    @ MOVT    R0, #:upper16:OS_CPU_EXCEPT_STK_BASE
+    LDR     R0, =OS_CPU_EXCEPT_STK_BASE
     LDR     R1, [R0]
     MSR     MSP, R1
 
-    BL      OSTaskSwHook                                        @ Call OSTaskSwHook() for FPU Push & Pop
+    @ BL      OSTaskSwHook                                        @ Call OSTaskSwHook() for FPU Push & Pop
 @ 把OSRunning设置为true
     LDR     R0, =OSRunning                                      @ OSRunning = TRUE
     MOVS    R1, #1
     STRB    R1, [R0]
 
-    @ MOVW    R0, #:lower16:OSPrioCur                             @ OSPrioCur   = OSPrioHighRdy;
-    @ MOVT    R0, #:upper16:OSPrioCur
-    LDR     R0, =OSPrioCur
-    @ MOVW    R1, #:lower16:OSPrioHighRdy
-    @ MOVT    R1, #:upper16:OSPrioHighRdy
-    LDR     R1, =OSPrioHighRdy
+    @ MOVW    R0, #:lower16:OS_PRIO_CUR                             @ OS_PRIO_CUR   = OS_PRIO_HIGH_RDY;
+    @ MOVT    R0, #:upper16:OS_PRIO_CUR
+    LDR     R0, =OS_PRIO_CUR
+    @ MOVW    R1, #:lower16:OS_PRIO_HIGH_RDY
+    @ MOVT    R1, #:upper16:OS_PRIO_HIGH_RDY
+    LDR     R1, =OS_PRIO_HIGH_RDY
     LDRB    R2, [R1]
     STRB    R2, [R0]
 
-    @ MOVW    R0, #:lower16:OSTCBCur                              @ OSTCBCur  = OSTCBHighRdy;
-    @ MOVT    R0, #:upper16:OSTCBCur
-    LDR     R0, =OSTCBCur
-    @ MOVW    R1, #:lower16:OSTCBHighRdy
-    @ MOVT    R1, #:upper16:OSTCBHighRdy
-    LDR     R1, =OSTCBHighRdy
+    @ MOVW    R0, #:lower16:OS_TCB_CUR                              @ OS_TCB_CUR  = OS_TCB_HIGH_RDY;
+    @ MOVT    R0, #:upper16:OS_TCB_CUR
+    LDR     R0, =OS_TCB_CUR
+    @ MOVW    R1, #:lower16:OS_TCB_HIGH_RDY
+    @ MOVT    R1, #:upper16:OS_TCB_HIGH_RDY
+    LDR     R1, =OS_TCB_HIGH_RDY
     LDR     R2, [R1]
     STR     R2, [R0]
 
-    LDR     R0, [R2]                                            @ R0 is new process SP; SP = OSTCBHighRdy->OSTCBStkPtr;
+    LDR     R0, [R2]                                            @ R0 is new process SP; SP = OS_TCB_HIGH_RDY->OSTCBStkPtr;
     MSR     PSP, R0                                             @ Load PSP with new process SP
 
     MRS     R0, CONTROL

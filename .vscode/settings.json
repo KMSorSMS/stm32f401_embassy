@@ -23,7 +23,9 @@
     // "exti",
     // "rt",
     // "stm32f401re",
+    "stride",
   ],
+  
   "rust-analyzer.linkedProjects": [
     // "embassy-stm32/Cargo.toml",
     // To work on the examples, comment the line above and all of the cargo.features lines,

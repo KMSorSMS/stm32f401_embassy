@@ -22,6 +22,8 @@ pub struct OsTCB {
     ostcb_pre: Option<OSTCBPtr>,
     /// the priority of the thread
     os_prio: OSTCBPrio,
+    /// the stride of the task
+    stride:usize,
     /// to accomplish the real-time requirement, adding bit map
     os_tcb_bitx: OSPRIOBIT,
     os_tcb_bity: OSPRIOBIT,
@@ -43,6 +45,8 @@ const CONTEXT_STACK_SIZE: usize = 16;
 const OS_MAX_TASKS: usize = 20;
 /// the number of system's task(now just idle)
 const OS_N_SYS_TASKS: usize = 1;
+/// the stride num of scheduling algorithm
+const OS_STRIDE_NUM: usize = 0x8000;
 
 /********************************************************************************
                                     TCBs' List
@@ -54,6 +58,7 @@ static mut OSTCBTBL_ORIGIN: [OsTCB; OS_MAX_TASKS + OS_N_SYS_TASKS + 1] = [OsTCB 
     ostcb_next: None,
     ostcb_pre: None,
     os_prio: 0,
+    stride:0,
     os_tcb_bitx: 0,
     os_tcb_bity: 0,
     os_tcb_x: 0,

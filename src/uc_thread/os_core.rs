@@ -8,12 +8,15 @@ use core::{
 };
 use os_task::os_task_create;
 use types::OsErrState;
+use core::arch::global_asm;
+
+global_asm!(include_str!("os_cpu.S"));
 
 // import asm func
 extern "C" {
-    fn OSStartHighRdy()->!;
-    fn OSCtxSw();
-    fn OSIntCtxSw();
+    pub fn OSStartHighRdy()->!;
+    pub fn OSCtxSw();
+    pub fn OSIntCtxSw();
 }
 
 /// initialize the internals of uC/OS-II
@@ -31,8 +34,13 @@ pub fn os_init() {
 pub fn os_start() -> !{
     // when the os just starts, there is no need to use cs
     if !unsafe { OS_IS_RUNNING } {
-        os_sched_new();
+        // os_sched_new();
+        let mut y: u8 = 0;
         unsafe {
+            // for it is the first time to run the os, so schedule the task by prio
+            y = OS_UNMAP_TBL[unsafe { OS_RDY_GRP } as usize];
+            OS_PRIO_HIGH_RDY = (y << 3) + OS_UNMAP_TBL[*(OS_RDY_TBL.add(y as usize)) as usize];
+            // (*OS_TCB_HIGH_RDY).stride+=OS_STRIDE_NUM/(*OS_TCB_HIGH_RDY).os_prio as usize;
             OS_PRIO_CUR = OS_PRIO_HIGH_RDY;
             OS_TCB_HIGH_RDY = OS_TCB_PRIO_TBL[OS_PRIO_HIGH_RDY as usize];
             OS_TCB_CUR = OS_TCB_HIGH_RDY;
@@ -41,7 +49,7 @@ pub fn os_start() -> !{
     }else{
         loop {
             unsafe {
-                asm!("wfi");
+                asm!("wfe");
             }
         }
     }
@@ -108,6 +116,7 @@ pub fn os_sched() {
                 OS_TCB_HIGH_RDY = OS_TCB_PRIO_TBL[OS_PRIO_HIGH_RDY as usize];
                 // the new task is no the old task, need to sw
                 if OS_PRIO_CUR != OS_PRIO_HIGH_RDY {
+                    (*OS_TCB_HIGH_RDY).stride+=OS_STRIDE_NUM/(*OS_TCB_HIGH_RDY).os_prio as usize;
                     OSCtxSw();
                 }
             }
@@ -131,7 +140,7 @@ pub fn os_int_enter() {
 
 /// is called when exit an ISR
 #[allow(unused)]
-fn os_int_exit() {
+pub fn os_int_exit() {
     // need a cs
     critical_section::with(|_cs| unsafe {
         if OS_IS_RUNNING && OSINT_NESTING > 0 {
@@ -141,6 +150,8 @@ fn os_int_exit() {
             os_sched_new();
             OS_TCB_HIGH_RDY = OS_TCB_PRIO_TBL[OS_PRIO_HIGH_RDY as usize];
             if OS_PRIO_CUR != OS_PRIO_HIGH_RDY {
+                // update the stride 
+                (*OS_TCB_HIGH_RDY).stride+=OS_STRIDE_NUM/(*OS_TCB_HIGH_RDY).os_prio as usize;
                 OSIntCtxSw();
             }
         }
@@ -209,14 +220,37 @@ fn os_init_task_idle() {
 }
 
 /// find highest priority's task priority number
+/// change this func to stride scheduling algorithm
 fn os_sched_new() {
-    // now the OS_LOWEST_PRIO will not be large than 63
-    let mut y: u8 = 0;
-    // need a cs
-    critical_section::with(|_cs| {
-        y = OS_UNMAP_TBL[unsafe { OS_RDY_GRP } as usize];
-        unsafe {
-            OS_PRIO_HIGH_RDY = (y << 3) + OS_UNMAP_TBL[*(OS_RDY_TBL.add(y as usize)) as usize];
-        }
-    });
+    #[cfg(feature="bitmap")]
+    {
+        // now the OS_LOWEST_PRIO will not be large than 63
+        let mut y: u8 = 0;
+        // need a cs
+        critical_section::with(|_cs| {
+            y = OS_UNMAP_TBL[unsafe { OS_RDY_GRP } as usize];
+            unsafe {
+                OS_PRIO_HIGH_RDY = (y << 3) + OS_UNMAP_TBL[*(OS_RDY_TBL.add(y as usize)) as usize];
+            }
+        });
+    }
+    
+    #[cfg(feature = "stride")]
+    {
+        // need a cs
+        critical_section::with(|_cs| {
+            unsafe {
+                // init min_stride & OS_PRIO_HIGH_RDY
+                let mut min_stride=usize::MAX;
+                let mut ptr:OSTCBPtr = OS_TCB_LIST;
+                while !ptr.is_null() {
+                    if min_stride>(*ptr).stride {
+                        OS_PRIO_HIGH_RDY = (*ptr).os_prio;
+                        min_stride=(*ptr).stride;
+                    }
+                    ptr = (*ptr).ostcb_next.unwrap();
+                }
+            }
+        });
+    }
 }

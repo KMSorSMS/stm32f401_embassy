@@ -31,3 +31,11 @@ embassy-hal-internal =  {git = "https://github.com/embassy-rs/embassy", rev = "4
 [profile.release]
 opt-level = 0
 debug = 2
+
+[features]
+default = ["stride"]
+stride = []
+
+# to build the asm
+# [build-dependencies]
+# cc = "1.0"
