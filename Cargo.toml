@@ -19,6 +19,7 @@ cortex-m = { version = "0.7.6", features = ["inline-asm", "critical-section-sing
 cortex-m-rt = "0.7.0"
 panic-probe = { version = "0.3", features = ["print-defmt"] }
 critical-section = "1.1"
+static_cell = "2"
 
 
 [patch.crates-io]

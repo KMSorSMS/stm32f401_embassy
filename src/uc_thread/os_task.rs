@@ -1,20 +1,17 @@
 //! OS task/thread abstraction
-use super::os_core::os_tcb_init;
-use super::{OSINT_NESTING, OS_TCB_PRIO_TBL};
+use super::os_core::{os_sched, os_tcb_init};
 use super::os_cpu::ostask_stk_init;
 use super::types::{OSTCBPrio, OsErrState, OsStkPtr, Task};
+use super::{OSINT_NESTING, OS_IS_RUNNING, OS_TCB_PRIO_TBL};
 
 /// create a task/thread
 #[allow(unused)]
 pub fn os_task_create(task: Task, ptos: OsStkPtr, prio: OSTCBPrio) -> OsErrState {
     // judge if the tcb already allocated
     if critical_section::with(|cs| {
-        let mut ref_prio_tcb = &unsafe { OS_TCB_PRIO_TBL[prio as usize] };
-        if let Some(_) = ref_prio_tcb {
-            return false;
-        }
-        // make sure we are not in the interrupt
-        else if unsafe { OSINT_NESTING } > 0 {
+        let mut ref_prio_tcb = unsafe { OS_TCB_PRIO_TBL[prio as usize] };
+        // also make sure we are not in the interrupt
+        if !ref_prio_tcb.is_null() || unsafe { OSINT_NESTING } > 0 {
             return false;
         }
         true
@@ -22,7 +19,15 @@ pub fn os_task_create(task: Task, ptos: OsStkPtr, prio: OSTCBPrio) -> OsErrState
         // we call the OSTaskStkInit function to initialize the task's stack
         let psp = ostask_stk_init(task, ptos);
         // with this psp we will init our tcb
-        let err = os_tcb_init(prio,psp);
+        let err = os_tcb_init(prio, psp);
+        if err == OsErrState::OsErrNone {
+            if unsafe { OS_IS_RUNNING } {
+                os_sched();
+                return OsErrState::OsErrNone;
+            }
+        }else {
+            return err;
+        }
     }
-    OsErrState::OsErrNone
+    OsErrState::OsErrTaskCreate
 }
