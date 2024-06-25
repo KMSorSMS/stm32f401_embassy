@@ -1,8 +1,8 @@
 
 use core::arch::asm;
 
-use super::{os_core::{os_int_enter, os_int_exit}, types::{ OsStkPtr, Task}, CONTEXT_STACK_SIZE, OS_IS_RUNNING, OS_TICKS_PER_SEC};
-use cortex_m::{peripheral::{SCB, SYST}, Peripherals};
+use super::{os_core::{os_int_enter, os_int_exit}, types::{ OsStkPtr, Task}, CONTEXT_STACK_SIZE, OS_TICKS_PER_SEC};
+use cortex_m::Peripherals;
 use cortex_m_rt::exception;
 extern crate cortex_m_rt;
 /// the context structure store in stack

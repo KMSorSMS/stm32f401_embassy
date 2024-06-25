@@ -48,6 +48,7 @@ const OS_N_SYS_TASKS: usize = 1;
 /// the stride num of scheduling algorithm
 const OS_STRIDE_NUM: usize = 0x8000;
 
+
 /********************************************************************************
                                     TCBs' List
 *********************************************************************************/
@@ -130,6 +131,7 @@ static mut OSINT_NESTING: u8 = 0;
 **********************************************************************************/
 /// The piority of the current task
 #[allow(unused)]
+#[no_mangle]
 static mut OS_PRIO_CUR: u8 = 0;
 
 // #[allow(unused)]
@@ -137,6 +139,7 @@ static mut OS_PRIO_CUR: u8 = 0;
 
 /// The piority of the new task
 #[allow(unused)]
+#[no_mangle]
 static mut OS_PRIO_HIGH_RDY: u8 = 0;
 
 // #[allow(unused)]
@@ -144,14 +147,17 @@ static mut OS_PRIO_HIGH_RDY: u8 = 0;
 
 /// the TCP ptr of the current task
 #[allow(unused)]
+#[no_mangle]
 static mut OS_TCB_CUR: OSTCBPtr = core::ptr::null_mut();
 
 /// the TCP ptr of the new task
 #[allow(unused)]
+#[no_mangle]
 static mut OS_TCB_HIGH_RDY: OSTCBPtr = core::ptr::null_mut();
 
 /// the state of the OS Core
 #[allow(unused)]
+#[no_mangle]
 static mut OS_IS_RUNNING: bool = false;
 
 // static mut OSTaskCtr:u32=0;
@@ -174,6 +180,13 @@ const OS_TICKS_PER_SEC:usize=1000;
 const OS_TASK_IDLE_STK_SIZE: usize = 128;
 /// the stack of the idle task
 static mut OS_TASK_IDLE_STK: [OsStk; OS_TASK_IDLE_STK_SIZE] = [0; OS_TASK_IDLE_STK_SIZE];
+
+/// OS_CPU_EXCEPT_STK_BASE size
+const OS_CPU_EXCEPT_STK_BASE_SIZE: usize = 256;
+
+#[allow(unused)]
+#[no_mangle]
+static mut OS_CPU_EXCEPT_STK_BASE: [OsStk; OS_CPU_EXCEPT_STK_BASE_SIZE] = [0; OS_CPU_EXCEPT_STK_BASE_SIZE];
 
 // /// the size of task1's stack
 // const OS_TASK1_STK_SIZE:usize = 128;
