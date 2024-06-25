@@ -1,20 +1,24 @@
 //! The core of the uC/OS-II
+use crate::uc_thread;
+
 #[allow(unused_imports)]
 use super::*;
+use core::arch::global_asm;
 #[allow(unused_imports)]
 use core::{
     arch::asm,
     ptr::{addr_of, addr_of_mut},
 };
+use defmt::info;
 use os_task::os_task_create;
 use types::OsErrState;
-use core::arch::global_asm;
+use {defmt_rtt as _, panic_probe as _};
 
 global_asm!(include_str!("os_cpu.S"));
 
 // import asm func
 extern "C" {
-    pub fn OSStartHighRdy()->!;
+    pub fn OSStartHighRdy() -> !;
     pub fn OSCtxSw();
     pub fn OSIntCtxSw();
 }
@@ -22,6 +26,9 @@ extern "C" {
 /// initialize the internals of uC/OS-II
 #[allow(unused)]
 pub fn os_init() {
+    info!("if os is running in os_init? {}", unsafe {
+        uc_thread::os_core::OS_IS_RUNNING
+    });
     os_init_tcblist();
     os_init_event_list();
     os_mem_init();
@@ -31,8 +38,11 @@ pub fn os_init() {
 
 /// start the uC/OS-II. should be called after the os_init and the creation of taskz
 #[allow(unused)]
-pub fn os_start() -> !{
+pub fn os_start() -> ! {
     // when the os just starts, there is no need to use cs
+    info!("if os is running in os_start? {}", unsafe {
+        uc_thread::os_core::OS_IS_RUNNING
+    });
     if !unsafe { OS_IS_RUNNING } {
         // os_sched_new();
         let mut y: u8 = 0;
@@ -46,9 +56,12 @@ pub fn os_start() -> !{
             OS_TCB_CUR = OS_TCB_HIGH_RDY;
             OSStartHighRdy()
         }
-    }else{
+    } else {
         loop {
             unsafe {
+                info!("if os is running in os_start? {}\n", unsafe {
+                    uc_thread::os_core::OS_IS_RUNNING
+                });
                 asm!("wfe");
             }
         }
@@ -100,9 +113,8 @@ pub fn os_tcb_init(prio: OSTCBPrio, ptos: OsStkPtr) -> OsErrState {
         OS_RDY_GRP |= (*ptcb).os_tcb_bity;
         // set the bit in the ready table
         OS_RDY_TBL.offset((*ptcb).os_tcb_y as isize).write((*ptcb).os_tcb_bitx);
-        OsErrState::OsErrNone   
+        OsErrState::OsErrNone
     })
-
 }
 
 /// shedule the task
@@ -116,7 +128,7 @@ pub fn os_sched() {
                 OS_TCB_HIGH_RDY = OS_TCB_PRIO_TBL[OS_PRIO_HIGH_RDY as usize];
                 // the new task is no the old task, need to sw
                 if OS_PRIO_CUR != OS_PRIO_HIGH_RDY {
-                    (*OS_TCB_HIGH_RDY).stride+=OS_STRIDE_NUM/(*OS_TCB_HIGH_RDY).os_prio as usize;
+                    (*OS_TCB_HIGH_RDY).stride += OS_STRIDE_NUM / (*OS_TCB_HIGH_RDY).os_prio as usize;
                     OSCtxSw();
                 }
             }
@@ -150,8 +162,8 @@ pub fn os_int_exit() {
             os_sched_new();
             OS_TCB_HIGH_RDY = OS_TCB_PRIO_TBL[OS_PRIO_HIGH_RDY as usize];
             if OS_PRIO_CUR != OS_PRIO_HIGH_RDY {
-                // update the stride 
-                (*OS_TCB_HIGH_RDY).stride+=OS_STRIDE_NUM/(*OS_TCB_HIGH_RDY).os_prio as usize;
+                // update the stride
+                (*OS_TCB_HIGH_RDY).stride += OS_STRIDE_NUM / (*OS_TCB_HIGH_RDY).os_prio as usize;
                 OSIntCtxSw();
             }
         }
@@ -222,7 +234,7 @@ fn os_init_task_idle() {
 /// find highest priority's task priority number
 /// change this func to stride scheduling algorithm
 fn os_sched_new() {
-    #[cfg(feature="bitmap")]
+    #[cfg(feature = "bitmap")]
     {
         // now the OS_LOWEST_PRIO will not be large than 63
         let mut y: u8 = 0;
@@ -234,19 +246,19 @@ fn os_sched_new() {
             }
         });
     }
-    
+
     #[cfg(feature = "stride")]
     {
         // need a cs
         critical_section::with(|_cs| {
             unsafe {
                 // init min_stride & OS_PRIO_HIGH_RDY
-                let mut min_stride=usize::MAX;
-                let mut ptr:OSTCBPtr = OS_TCB_LIST;
+                let mut min_stride = usize::MAX;
+                let mut ptr: OSTCBPtr = OS_TCB_LIST;
                 while !ptr.is_null() {
-                    if min_stride>(*ptr).stride {
+                    if min_stride > (*ptr).stride {
                         OS_PRIO_HIGH_RDY = (*ptr).os_prio;
-                        min_stride=(*ptr).stride;
+                        min_stride = (*ptr).stride;
                     }
                     ptr = (*ptr).ostcb_next.unwrap();
                 }

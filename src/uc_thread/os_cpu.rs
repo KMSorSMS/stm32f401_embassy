@@ -17,6 +17,7 @@ struct UcStk {
     r9: u32,
     r10: u32,
     r11: u32,
+    r14: u32,
     // below are stored when the interrupt occurs
     r0: u32,
     r1: u32,
@@ -38,17 +39,19 @@ pub fn ostask_stk_init(task: Task,ptos:OsStkPtr)-> OsStkPtr {
     // initialize the stack
     unsafe {
         (*psp).r0 = 0;
-        (*psp).r1 = 0;
-        (*psp).r2 = 0;
-        (*psp).r3 = 0;
-        (*psp).r4 = 0;
-        (*psp).r5 = 0;
-        (*psp).r6 = 0;
-        (*psp).r7 = 0;
-        (*psp).r8 = 0;
-        (*psp).r9 = 0;
-        (*psp).r10 = 0;
-        (*psp).r11 = 0;
+        (*psp).r1 = 0x01010101;
+        (*psp).r2 = 0x02020202;
+        (*psp).r3 = 0x03030303;
+        (*psp).r4 = 0x04040404;
+        (*psp).r5 = 0x05050505;
+        (*psp).r6 = 0x06060606;
+        (*psp).r7 = 0x07070707;
+        (*psp).r8 = 0x08080808;
+        (*psp).r9 = 0x09090909;
+        (*psp).r10 = 0x10101010;
+        (*psp).r11 = 0x11111111;
+        (*psp).r12 = 0x12121212;
+        (*psp).r14 = 0xFFFFFFFD;
         (*psp).lr = 0;
         (*psp).pc = task as u32;
         (*psp).xpsr = 0x01000000;

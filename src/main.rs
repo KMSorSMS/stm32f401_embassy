@@ -4,7 +4,6 @@
 // use the asm code.
 // the rust version of uc's thread part
 pub mod uc_thread;
-use core::ptr::addr_of_mut;
 
 use cortex_m_rt::entry;
 use defmt::*;
@@ -21,9 +20,7 @@ static EXECUTOR_LOW2: StaticCell<Executor> = StaticCell::new();
 const TASK1_STK_SIZE: usize = 128;
 const TASK2_STK_SIZE: usize = 128;
 static mut TASK1_STK: [OsStk; TASK1_STK_SIZE] = [0; TASK1_STK_SIZE];
-static mut TASK1_STK_PTR: *mut OsStk = unsafe { addr_of_mut!(TASK1_STK[0]) };
 static mut TASK2_STK: [OsStk; TASK2_STK_SIZE] = [0; TASK2_STK_SIZE];
-static mut TASK2_STK_PTR: *mut OsStk = unsafe { addr_of_mut!(TASK2_STK[0]) };
 
 
 #[entry]
@@ -57,8 +54,10 @@ fn main() -> ! {
     systick_init(84000000);
     info!("Hello World!");
     os_init();
-    os_task_create(task_1, unsafe { TASK1_STK_PTR }, 10);
-    os_task_create(task_2, unsafe { TASK2_STK_PTR }, 11);
+    info!("task_1");
+    unsafe{os_task_create(task_1, &mut TASK1_STK[0], 10);}
+    info!("task_2");
+    unsafe{os_task_create(task_2, &mut TASK2_STK[0], 20);}
     os_start()
 }
 
