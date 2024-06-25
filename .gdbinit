@@ -1,10 +1,11 @@
 # monitor reset
 # b *0x08000000
 # b main
-b main.rs:62
-b main.rs:60
-b uc_thread/os_core.rs:47
-b uc_thread/os_task.rs:20
+# b main.rs:62
+# b main.rs:60
+# b uc_thread/os_core.rs:47
+b uc_thread/os_task.rs:13
+b uc_thread/os_core.rs:146
 start -y
 
 define dss

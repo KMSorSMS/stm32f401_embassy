@@ -142,6 +142,8 @@ pub fn os_int_enter() {
     // need a cs
     critical_section::with(|_cs| {
         unsafe {
+            let _is_running = unsafe { OS_IS_RUNNING };
+            let _nesting_time = unsafe { OSINT_NESTING };
             // less than 255 to void overflow
             if OS_IS_RUNNING && OSINT_NESTING < 255 {
                 OSINT_NESTING += 1;
@@ -158,7 +160,7 @@ pub fn os_int_exit() {
         if OS_IS_RUNNING && OSINT_NESTING > 0 {
             OSINT_NESTING -= 1;
         }
-        if OSINT_NESTING == 0 {
+        if OS_IS_RUNNING && OSINT_NESTING == 0 {
             os_sched_new();
             OS_TCB_HIGH_RDY = OS_TCB_PRIO_TBL[OS_PRIO_HIGH_RDY as usize];
             if OS_PRIO_CUR != OS_PRIO_HIGH_RDY {
@@ -227,7 +229,7 @@ fn os_init_task_idle() {
     // for the idle task's stack is a global variable, so we need unsafe.
     // because this func is called in OS_init, so there is no need to use cs
     unsafe {
-        os_task_create(os_task_idle, &mut OS_TASK_IDLE_STK[0], OS_TASK_IDLE_PRIO);
+        os_task_create(os_task_idle, &mut OS_TASK_IDLE_STK[OS_TASK_IDLE_STK_SIZE-1], OS_TASK_IDLE_PRIO);
     }
 }
 

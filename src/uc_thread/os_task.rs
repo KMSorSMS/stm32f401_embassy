@@ -10,9 +10,11 @@ use super::{OSINT_NESTING, OS_IS_RUNNING, OS_TCB_PRIO_TBL};
 #[allow(unused)]
 pub fn os_task_create(task: Task, ptos: OsStkPtr, prio: OSTCBPrio) -> OsErrState {
     info!("I'm in task_1");
+    let _is_running = unsafe { OS_IS_RUNNING };
     info!("if os is running in os_task_create {}", unsafe { OS_IS_RUNNING });
     // judge if the tcb already allocated
     if critical_section::with(|cs| {
+        let _is_running = unsafe { OS_IS_RUNNING };
         let mut ref_prio_tcb = unsafe { OS_TCB_PRIO_TBL[prio as usize] };
         // also make sure we are not in the interrupt
         if !ref_prio_tcb.is_null() || unsafe { OSINT_NESTING } > 0 {
@@ -29,7 +31,7 @@ pub fn os_task_create(task: Task, ptos: OsStkPtr, prio: OSTCBPrio) -> OsErrState
                 os_sched();
                 return OsErrState::OsErrNone;
             }
-        }else {
+        } else {
             return err;
         }
     }
