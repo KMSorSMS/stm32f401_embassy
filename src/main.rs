@@ -17,8 +17,8 @@ use uc_thread::{os_init, os_start, os_task_create, systick_init, OsStk};
 use {defmt_rtt as _, panic_probe as _};
 static EXECUTOR_LOW1: StaticCell<Executor> = StaticCell::new();
 static EXECUTOR_LOW2: StaticCell<Executor> = StaticCell::new();
-const TASK1_STK_SIZE: usize = 128;
-const TASK2_STK_SIZE: usize = 128;
+const TASK1_STK_SIZE: usize = 1024;
+const TASK2_STK_SIZE: usize = 1024;
 static mut TASK1_STK: [OsStk; TASK1_STK_SIZE] = [0; TASK1_STK_SIZE];
 static mut TASK2_STK: [OsStk; TASK2_STK_SIZE] = [0; TASK2_STK_SIZE];
 

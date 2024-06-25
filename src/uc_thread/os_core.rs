@@ -54,6 +54,9 @@ pub fn os_start() -> ! {
             OS_PRIO_CUR = OS_PRIO_HIGH_RDY;
             OS_TCB_HIGH_RDY = OS_TCB_PRIO_TBL[OS_PRIO_HIGH_RDY as usize];
             OS_TCB_CUR = OS_TCB_HIGH_RDY;
+            let _os_prio_high_rdy = OS_PRIO_HIGH_RDY;
+            let _os_prio_cur = OS_PRIO_CUR;
+            info!("OS_PRIO_HIGH_RDY: {}", OS_PRIO_HIGH_RDY);
             OSStartHighRdy()
         }
     } else {
