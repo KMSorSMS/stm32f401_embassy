@@ -1,15 +1,23 @@
-
 use core::arch::asm;
 
-use super::{os_core::{os_int_enter, os_int_exit}, types::{ OsStkPtr, Task}, CONTEXT_STACK_SIZE, OS_TICKS_PER_SEC};
+use super::{
+    os_core::{os_int_enter, os_int_exit},
+    types::{OsStkPtr, Task},
+    CONTEXT_STACK_SIZE, OS_TICKS_PER_SEC,
+};
 use cortex_m::Peripherals;
 use cortex_m_rt::exception;
 extern crate cortex_m_rt;
+// import asm func
+extern "C" {
+    pub fn PendSV_Handler();
+}
+
 /// the context structure store in stack
-#[repr(C,align(8))]
+#[repr(C, align(8))]
 struct UcStk {
     // below are the remaining part of the task's context
-    r4: u32,    
+    r4: u32,
     r5: u32,
     r6: u32,
     r7: u32,
@@ -30,11 +38,9 @@ struct UcStk {
 }
 
 /// initialize the stack of the task :simulation push
-pub fn ostask_stk_init(task: Task,ptos:OsStkPtr)-> OsStkPtr {
+pub fn ostask_stk_init(task: Task, ptos: OsStkPtr) -> OsStkPtr {
     // we store the data in UcStk and then push it to the stack
-    let ptos = unsafe {
-        ptos.offset(-(CONTEXT_STACK_SIZE as isize) as isize)
-    };
+    let ptos = unsafe { ptos.offset(-(CONTEXT_STACK_SIZE as isize) as isize) };
     let psp = ptos as *mut UcStk;
     // initialize the stack
     unsafe {
@@ -59,16 +65,15 @@ pub fn ostask_stk_init(task: Task,ptos:OsStkPtr)-> OsStkPtr {
     psp as OsStkPtr
 }
 
-
-pub fn systick_init(cpu_freq: usize){
+pub fn systick_init(cpu_freq: usize) {
     let cnts: u32 = (cpu_freq / OS_TICKS_PER_SEC) as u32;
     let mut p = Peripherals::take().unwrap();
     // get the register block of systick
     let mut stk = p.SYST;
     // set the reload val
-    stk.set_reload(cnts-1);
+    stk.set_reload(cnts - 1);
     // set the systick handler prio this need to use the register:SCB_SHPRI3
-    unsafe { p.SCB.set_priority(cortex_m::peripheral::scb::SystemHandler::SysTick,2) };
+    unsafe { p.SCB.set_priority(cortex_m::peripheral::scb::SystemHandler::SysTick, 2) };
 
     // clear the current value
     stk.clear_current();
@@ -83,16 +88,24 @@ pub fn systick_init(cpu_freq: usize){
 /// the systick handler
 /// the func is not pub for the requirement of the exception
 #[exception]
-fn SysTick(){
+fn SysTick() {
     os_int_enter();
     ostime_tick();
     os_int_exit();
 }
 
-/// the tick func of the os. In this func the 
+/// the pendsv hadler
+#[exception]
+fn PendSV() {
+    unsafe {
+        PendSV_Handler();
+    }
+}
+
+/// the tick func of the os. In this func the
 /// If the func is called, there MUST be a scheduling point.
 #[inline]
-fn ostime_tick(){
+fn ostime_tick() {
     // wake up the MCU(maybe the MCU is not in low power mode anyway)
     // In blinky, though sev instruction is called, the ISR will be executed continue.
     // Maybe it is because the cs?
@@ -100,8 +113,8 @@ fn ostime_tick(){
     // 1. there is no thread to run (now the MCU should be in low power mode)
     // 2. there is still some threads can be sheduled, but the MCU is in low power mode. at this time, we should wake up the MCU.
     // But we consider that the wfe time is also the time of the thread.
-    critical_section::with(|_cs|{
-        unsafe{asm!("sev")};
+    critical_section::with(|_cs| {
+        unsafe { asm!("sev") };
     });
     // there is nothing to do. I will chage the scheduling algorithm in os_sched
 }
