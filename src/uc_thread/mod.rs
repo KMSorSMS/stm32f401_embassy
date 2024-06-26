@@ -186,7 +186,10 @@ const OS_CPU_EXCEPT_STK_BASE_SIZE: usize = 256;
 
 #[allow(unused)]
 #[no_mangle]
-static mut OS_CPU_EXCEPT_STK_BASE: [OsStk; OS_CPU_EXCEPT_STK_BASE_SIZE] = [0; OS_CPU_EXCEPT_STK_BASE_SIZE];
+static mut OS_CPU_EXCEPT_STK_BASE_ARRAY: [OsStk; OS_CPU_EXCEPT_STK_BASE_SIZE] = [0; OS_CPU_EXCEPT_STK_BASE_SIZE];
+#[allow(unused)]
+#[no_mangle]
+static mut OS_CPU_EXCEPT_STK_BASE: OsStkPtr = unsafe { addr_of_mut!(OS_CPU_EXCEPT_STK_BASE_ARRAY[OS_CPU_EXCEPT_STK_BASE_SIZE-1]) };
 
 // /// the size of task1's stack
 // const OS_TASK1_STK_SIZE:usize = 128;

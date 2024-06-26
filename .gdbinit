@@ -7,6 +7,7 @@ b main.rs:65
 # b uc_thread/os_task.rs:13
 # b uc_thread/os_core.rs:146
 # b uc_thread/os_core.rs:57
+b uc_thread/os_cpu.rs:87
 
 start -y
 
