@@ -60,6 +60,7 @@ Jclien:
 clean:
 	cargo clean
 run:
+	clear
 	cargo run $(MODE_ARG)
 defmt:
 	zsh -c "nc localhost $(PORT) | defmt-print -e $(FILE_ELF) "

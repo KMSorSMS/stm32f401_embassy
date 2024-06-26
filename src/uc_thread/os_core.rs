@@ -33,7 +33,7 @@ pub fn os_init() {
     os_init_event_list();
     os_mem_init();
     os_q_init();
-    os_init_task_idle();
+    // os_init_task_idle();
 }
 
 /// start the uC/OS-II. should be called after the os_init and the creation of taskz
@@ -168,7 +168,7 @@ pub fn os_int_exit() {
             OS_TCB_HIGH_RDY = OS_TCB_PRIO_TBL[OS_PRIO_HIGH_RDY as usize];
             if OS_PRIO_CUR != OS_PRIO_HIGH_RDY {
                 // update the stride
-                (*OS_TCB_HIGH_RDY).stride += OS_STRIDE_NUM / (*OS_TCB_HIGH_RDY).os_prio as usize;
+                (*OS_TCB_HIGH_RDY).stride += OS_STRIDE_NUM / (OS_LOWEST_PRIO-(*OS_TCB_HIGH_RDY).os_prio as usize);
                 OSIntCtxSw();
             }
         }
@@ -209,30 +209,29 @@ fn os_mem_init() {}
 fn os_q_init() {}
 
 /// the task of idle
+#[allow(unused)]
 fn os_task_idle() {
     // check the ready queue, if there is no task, then wfe.
     // here we need a cs
     loop {
-        if critical_section::with(|_cs| {
-            if unsafe { OS_RDY_GRP } != 0 {
-                return false;
-            } else {
-                return true;
-            }
-        }) {
-            unsafe {
-                asm!("wfe");
-            }
+        unsafe {
+            info!("execute wfe, I'm in task idle");
+            asm!("wfe");
         }
     }
 }
 
 /// init the idle task
+#[allow(unused)]
 fn os_init_task_idle() {
     // for the idle task's stack is a global variable, so we need unsafe.
     // because this func is called in OS_init, so there is no need to use cs
     unsafe {
-        os_task_create(os_task_idle, &mut OS_TASK_IDLE_STK[OS_TASK_IDLE_STK_SIZE-1], OS_TASK_IDLE_PRIO);
+        os_task_create(
+            os_task_idle,
+            &mut OS_TASK_IDLE_STK[OS_TASK_IDLE_STK_SIZE - 1],
+            OS_TASK_IDLE_PRIO,
+        );
     }
 }
 

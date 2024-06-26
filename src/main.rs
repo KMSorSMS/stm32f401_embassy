@@ -9,7 +9,7 @@ use cortex_m_rt::entry;
 use defmt::*;
 use embassy_executor::Executor;
 use embassy_stm32::rcc::Pll;
-use embassy_time::Timer;
+// use embassy_time::Timer;
 use static_cell::StaticCell;
 use stm32_metapac::rcc::vals;
 use uc_thread::{os_init, os_start, os_task_create, systick_init, OsStk};
@@ -55,16 +55,16 @@ fn main() -> ! {
     info!("Hello World!");
     os_init();
     info!("task_1");
-    unsafe{os_task_create(task_1, &mut TASK1_STK[TASK1_STK_SIZE-1], 10);}
+    unsafe{os_task_create(task_1, &mut TASK1_STK[TASK1_STK_SIZE-1], 12);}
     info!("task_2");
-    unsafe{os_task_create(task_2, &mut TASK2_STK[TASK2_STK_SIZE-1], 20);}
+    unsafe{os_task_create(task_2, &mut TASK2_STK[TASK2_STK_SIZE-1], 11);}
     os_start()
 }
 
 fn task_1() {
     let executor = EXECUTOR_LOW1.init(Executor::new());
     executor.run(|spawner| {
-        unwrap!(spawner.spawn(blink2()));
+        // unwrap!(spawner.spawn(blink2()));
         unwrap!(spawner.spawn(blink1()));
     });
 }
@@ -81,11 +81,14 @@ async fn blink1() {
     loop {
         info!("high1");
         // led.set_high();
-        Timer::after_millis(300).await;
+        // Timer::after_millis(300).await;
+        block_delay(1000);
 
         info!("low1");
         // led.set_low();
-        Timer::after_millis(300).await;
+        // Timer::after_millis(300).await;
+        block_delay(1000);
+
     }
 }
 
@@ -94,11 +97,13 @@ async fn blink2() {
     loop {
         info!("high2");
         // led.set_high();
-        Timer::after_millis(300).await;
+        // Timer::after_millis(300).await;
+        block_delay(100);
 
         info!("low2");
         // led.set_low();
-        Timer::after_millis(300).await;
+        block_delay(100);
+        // Timer::after_millis(300).await;
     }
 }
 
@@ -107,10 +112,22 @@ async fn blink3() {
     loop {
         info!("high3");
         // led.set_high();
-        Timer::after_millis(300).await;
-
+        // Timer::after_millis(300).await;
+        block_delay(1000);
         info!("low3");
         // led.set_low();
-        Timer::after_millis(300).await;
+        // Timer::after_millis(300).await;
+        block_delay(1000);
     }
 }
+
+fn block_delay(tick: u32){
+    let mut i = 0;
+    let mut j = 0;
+    while i < tick {
+        i += 1;
+        while j < tick*tick {
+            j += 1;
+        }
+    }
+} 
