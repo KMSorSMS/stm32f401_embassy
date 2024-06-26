@@ -9,7 +9,7 @@ b main.rs:65
 # b uc_thread/os_core.rs:57
 b uc_thread/os_cpu.rs:87
 
-start -y
+start
 
 define dss
   dashboard source -output /dev/pts/$arg0

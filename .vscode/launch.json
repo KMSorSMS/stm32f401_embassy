@@ -152,7 +152,7 @@
       "request": "launch",
       "servertype": "jlink",
       "cwd": "${workspaceRoot}",
-      "executable": "${workspaceRoot}/target/thumbv7em-none-eabi/debug/stm32f401_embassy",
+      "executable": "${workspaceRoot}/target/thumbv7em-none-eabi/release/stm32f401_embassy",
       "device": "STM32F401RE",
       "interface": "swd",
       "svdFile": "${workspaceRoot}/STM32F401.svd",
@@ -162,6 +162,6 @@
         "enabled": true,
         "address": "auto"
       }
-    },
+    }
   ]
 }
