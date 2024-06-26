@@ -17,11 +17,11 @@ use uc_thread::{os_init, os_start, os_task_create, systick_init, OsStk};
 use {defmt_rtt as _, panic_probe as _};
 static EXECUTOR_LOW1: StaticCell<Executor> = StaticCell::new();
 static EXECUTOR_LOW2: StaticCell<Executor> = StaticCell::new();
-const TASK1_STK_SIZE: usize = 4096;
-const TASK2_STK_SIZE: usize = 4096;
+const TASK1_STK_SIZE: usize = 512;
+const TASK2_STK_SIZE: usize = 512;
 static mut TASK1_STK: [OsStk; TASK1_STK_SIZE] = [0; TASK1_STK_SIZE];
 static mut TASK2_STK: [OsStk; TASK2_STK_SIZE] = [0; TASK2_STK_SIZE];
-const LIMIT_TIME:usize = 20;
+const LIMIT_TIME:usize = 100;
 
 #[entry]
 fn main() -> ! {
@@ -55,7 +55,7 @@ fn main() -> ! {
     info!("Hello World!");
     os_init();
     info!("task_1");
-    unsafe{os_task_create(task_1, &mut TASK1_STK[TASK1_STK_SIZE-1], 12);}
+    unsafe{os_task_create(task_1, &mut TASK1_STK[TASK1_STK_SIZE-1], 18);}
     info!("task_2");
     unsafe{os_task_create(task_2, &mut TASK2_STK[TASK2_STK_SIZE-1], 6);}
     os_start()
@@ -83,12 +83,12 @@ async fn blink1() {
         count1_times += 1;
         info!("high1");
         // led.set_high();
-        Timer::after_millis(300).await;
+        Timer::after_millis(30).await;
         // block_delay(1000);
 
         info!("low1");
         // led.set_low();
-        Timer::after_millis(300).await;
+        Timer::after_millis(30).await;
         // block_delay(1000);
         if count1_times >= LIMIT_TIME {
             break;
@@ -104,13 +104,13 @@ async fn blink2() {
         count2_times += 1;
         info!("high2");
         // led.set_high();
-        Timer::after_millis(300).await;
+        Timer::after_millis(30).await;
         // block_delay(100);
 
         info!("low2");
         // led.set_low();
         // block_delay(100);
-        Timer::after_millis(300).await;
+        Timer::after_millis(30).await;
         if count2_times >= LIMIT_TIME{
             break;
         }
@@ -126,11 +126,11 @@ async fn blink3() {
         count3_times += 1;
         info!("high3");
         // led.set_high();
-        Timer::after_millis(300).await;
+        Timer::after_millis(30).await;
         // block_delay(1000);
         info!("low3");
         // led.set_low();
-        Timer::after_millis(300).await;
+        Timer::after_millis(30).await;
         // block_delay(1000);
         if count3_times >= LIMIT_TIME {
             break;

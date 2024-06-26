@@ -172,7 +172,7 @@ static mut OS_IS_RUNNING: bool = false;
 // static mut OS_TIME: u32 = 0;
 // the tick num of a time slice
 #[allow(unused)]
-const OS_TICKS_PER_SEC:usize=10;
+const OS_TICKS_PER_SEC:usize=100;
 
 /********************************************************************************
                             Stack Size & Stack
@@ -183,7 +183,7 @@ const OS_TASK_IDLE_STK_SIZE: usize = 16;
 static mut OS_TASK_IDLE_STK: [OsStk; OS_TASK_IDLE_STK_SIZE] = [0; OS_TASK_IDLE_STK_SIZE];
 
 /// OS_CPU_EXCEPT_STK_BASE size
-const OS_CPU_EXCEPT_STK_BASE_SIZE: usize = 4096;
+const OS_CPU_EXCEPT_STK_BASE_SIZE: usize = 512;
 
 #[allow(unused)]
 #[no_mangle]
