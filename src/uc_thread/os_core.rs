@@ -54,6 +54,8 @@ pub fn os_start() -> ! {
             OS_PRIO_CUR = OS_PRIO_HIGH_RDY;
             OS_TCB_HIGH_RDY = OS_TCB_PRIO_TBL[OS_PRIO_HIGH_RDY as usize];
             OS_TCB_CUR = OS_TCB_HIGH_RDY;
+            // update the stride 
+            (*OS_TCB_HIGH_RDY).stride += OS_STRIDE_NUM / (OS_LOWEST_PRIO-(*OS_TCB_HIGH_RDY).os_prio as usize);
             let _os_prio_high_rdy = OS_PRIO_HIGH_RDY;
             let _os_prio_cur = OS_PRIO_CUR;
             info!("OS_PRIO_HIGH_RDY: {}", OS_PRIO_HIGH_RDY);
@@ -129,9 +131,9 @@ pub fn os_sched() {
             os_sched_new();
             unsafe {
                 OS_TCB_HIGH_RDY = OS_TCB_PRIO_TBL[OS_PRIO_HIGH_RDY as usize];
+                (*OS_TCB_HIGH_RDY).stride += OS_STRIDE_NUM / (OS_LOWEST_PRIO-(*OS_TCB_HIGH_RDY).os_prio as usize);
                 // the new task is no the old task, need to sw
                 if OS_PRIO_CUR != OS_PRIO_HIGH_RDY {
-                    (*OS_TCB_HIGH_RDY).stride += OS_STRIDE_NUM / (*OS_TCB_HIGH_RDY).os_prio as usize;
                     OSCtxSw();
                 }
             }
@@ -166,9 +168,9 @@ pub fn os_int_exit() {
         if OS_IS_RUNNING && OSINT_NESTING == 0 {
             os_sched_new();
             OS_TCB_HIGH_RDY = OS_TCB_PRIO_TBL[OS_PRIO_HIGH_RDY as usize];
+            (*OS_TCB_HIGH_RDY).stride += OS_STRIDE_NUM / (OS_LOWEST_PRIO-(*OS_TCB_HIGH_RDY).os_prio as usize);
             if OS_PRIO_CUR != OS_PRIO_HIGH_RDY {
                 // update the stride
-                (*OS_TCB_HIGH_RDY).stride += OS_STRIDE_NUM / (OS_LOWEST_PRIO-(*OS_TCB_HIGH_RDY).os_prio as usize);
                 OSIntCtxSw();
             }
         }
@@ -266,6 +268,8 @@ fn os_sched_new() {
                     }
                     ptr = (*ptr).ostcb_next.unwrap();
                 }
+                info!("in os_sched_new, the piro is {}",OS_PRIO_HIGH_RDY);
+                info!("in os_sched_new, the stride is {}",min_stride);
             }
         });
     }

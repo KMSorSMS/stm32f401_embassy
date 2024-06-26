@@ -9,7 +9,7 @@ use cortex_m_rt::entry;
 use defmt::*;
 use embassy_executor::Executor;
 use embassy_stm32::rcc::Pll;
-// use embassy_time::Timer;
+use embassy_time::Timer;
 use static_cell::StaticCell;
 use stm32_metapac::rcc::vals;
 use uc_thread::{os_init, os_start, os_task_create, systick_init, OsStk};
@@ -81,14 +81,13 @@ async fn blink1() {
     loop {
         info!("high1");
         // led.set_high();
-        // Timer::after_millis(300).await;
-        block_delay(1000);
+        Timer::after_millis(300).await;
+        // block_delay(1000);
 
         info!("low1");
         // led.set_low();
-        // Timer::after_millis(300).await;
-        block_delay(1000);
-
+        Timer::after_millis(300).await;
+        // block_delay(1000);
     }
 }
 

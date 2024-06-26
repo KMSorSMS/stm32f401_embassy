@@ -7,6 +7,7 @@ use super::{
 };
 use cortex_m::Peripherals;
 use cortex_m_rt::exception;
+use defmt::info;
 extern crate cortex_m_rt;
 // import asm func
 extern "C" {
@@ -89,6 +90,7 @@ pub fn systick_init(cpu_freq: usize) {
 /// the func is not pub for the requirement of the exception
 #[exception]
 fn SysTick() {
+    info!("systick");
     os_int_enter();
     ostime_tick();
     os_int_exit();
@@ -97,6 +99,7 @@ fn SysTick() {
 /// the pendsv hadler
 #[exception]
 fn PendSV() {
+    info!("PendSV");
     unsafe {
         PendSV_Handler();
     }

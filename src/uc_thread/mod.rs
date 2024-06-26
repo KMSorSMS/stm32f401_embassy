@@ -171,7 +171,7 @@ static mut OS_IS_RUNNING: bool = false;
 // static mut OS_TIME: u32 = 0;
 // the tick num of a time slice
 #[allow(unused)]
-const OS_TICKS_PER_SEC:usize=1000;
+const OS_TICKS_PER_SEC:usize=10;
 
 /********************************************************************************
                             Stack Size & Stack
