@@ -37,6 +37,9 @@ debug: build bin
 
 download: build bin
 	openocd -f interface/stlink.cfg -f target/stm32f4x.cfg -c init -c "halt" -c "flash write_image erase $(FILE_BIN) 0x8000000" -c "reset" -c "shutdown"
+Jdownload: build bin
+# openocd -f interface/jlink.cfg -c "transport select swd" -f target/stm32f4x.cfg -c init -c "reset" -c "halt" -c "flash write_image erase $(BUILD_DIR)/$(TARGET).bin 0x8000000" -c "reset" -c "shutdown"
+	JLinkExe -device $(DEVICE) -autoconnect 1 -if SWD -speed 4000 -CommanderScript script/JLinkDownload.jlink
 clean:
 	cargo clean
 run:

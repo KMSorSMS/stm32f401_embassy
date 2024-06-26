@@ -146,5 +146,22 @@
       //     "transport select swd",
       // ],
     },
+    {
+      "name": "J-Link Cortex-M4 Debug",
+      "type": "cortex-debug",
+      "request": "launch",
+      "servertype": "jlink",
+      "cwd": "${workspaceRoot}",
+      "executable": "${workspaceRoot}/target/thumbv7em-none-eabi/debug/stm32f401_embassy",
+      "device": "STM32F401RE",
+      "interface": "swd",
+      "svdFile": "${workspaceRoot}/STM32F401.svd",
+      "runToEntryPoint": "main",
+      "gdbPath": "/usr/bin/gdb-multiarch",
+      "rttConfig": {
+        "enabled": true,
+        "address": "auto"
+      }
+    },
   ]
 }

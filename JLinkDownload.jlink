@@ -1,0 +1,5 @@
+h
+loadfile target/$(PLATFORM)/$(MODE)/$(TARGET).bin 0x08000000
+r
+g
+exit
