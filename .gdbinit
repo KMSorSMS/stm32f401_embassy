@@ -8,7 +8,7 @@ b main.rs:65
 # b uc_thread/os_core.rs:146
 # b uc_thread/os_core.rs:57
 
-start -y
+start
 
 define dss
   dashboard source -output /dev/pts/$arg0

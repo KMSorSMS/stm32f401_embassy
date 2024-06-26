@@ -1,5 +1,6 @@
 TARGET := $(shell sed -n 's/^name = "\(.*\)"/\1/p' Cargo.toml)
 PLATFORM := $(shell sed -n 's/^target = "\(.*\)"/\1/p' .cargo/config.toml)
+DEVICE = STM32F401RE
 MODE ?= release
 # use command rust-nm -S target/thumbv7em-none-eabi/release/stm32f401_embassy | grep RTT ,to get the address of RTT
 # the command's output is 20000000 00000030 D _SEGGER_RTT
@@ -37,6 +38,19 @@ debug: build bin
 
 download: build bin
 	openocd -f interface/stlink.cfg -f target/stm32f4x.cfg -c init -c "halt" -c "flash write_image erase $(FILE_BIN) 0x8000000" -c "reset" -c "shutdown"
+Jdownload: build bin
+	JLinkExe -device $(DEVICE) -autoconnect 1 -if SWD -speed 4000 -CommanderScript JLinkDownload.jlink
+Jdebug: build bin Jdownload
+	tmux new-session -d \
+	"nc localhost 19021 | defmt-print -e $(FILE_ELF) " && \
+	tmux split-window -h "RUST_GDB=/usr/bin/gdb-multiarch rust-gdb -ex 'file $(FILE_ELF)' -ex 'set arch arm' -ex 'target extended-remote localhost:2331' \
+	-ex 'source ./.gdbinit' -ex 'reset' " && \
+	tmux -2 attach-session -d
+# -ex 'monitor reset' -ex 'monitor reset' -ex 'monitor rtt server start $(PORT) 0' -ex 'monitor rtt setup 0x$(RTT_ADDR) 0x$(RTT_SIZE) \"SEGGER RTT\" '  -ex 'monitor rtt start'
+JGDBServer:
+	JLinkGDBServer -device $(DEVICE) -if swd -speed 4000 &
+Jclien:
+	nc localhost 19021 | defmt-print -e $(FILE_ELF) 
 clean:
 	cargo clean
 run:
