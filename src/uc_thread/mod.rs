@@ -14,6 +14,7 @@ pub use os_cpu::systick_init;
 #[repr(C)]
 #[allow(unused)]
 #[derive(Clone, Copy)]
+#[repr(align(8))]
 pub struct OsTCB {
     /// stack pointer contains the basic register info
     sp: OsStkPtr,
@@ -177,12 +178,12 @@ const OS_TICKS_PER_SEC:usize=10;
                             Stack Size & Stack
 *********************************************************************************/
 /// the size of idle task's stack
-const OS_TASK_IDLE_STK_SIZE: usize = 128;
+const OS_TASK_IDLE_STK_SIZE: usize = 16;
 /// the stack of the idle task
 static mut OS_TASK_IDLE_STK: [OsStk; OS_TASK_IDLE_STK_SIZE] = [0; OS_TASK_IDLE_STK_SIZE];
 
 /// OS_CPU_EXCEPT_STK_BASE size
-const OS_CPU_EXCEPT_STK_BASE_SIZE: usize = 256;
+const OS_CPU_EXCEPT_STK_BASE_SIZE: usize = 4096;
 
 #[allow(unused)]
 #[no_mangle]

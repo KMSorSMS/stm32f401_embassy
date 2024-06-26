@@ -40,13 +40,11 @@ pub fn os_init() {
 #[allow(unused)]
 pub fn os_start() -> ! {
     // when the os just starts, there is no need to use cs
-    info!("if os is running in os_start? {}", unsafe {
-        uc_thread::os_core::OS_IS_RUNNING
-    });
     if !unsafe { OS_IS_RUNNING } {
         // os_sched_new();
         let mut y: u8 = 0;
         unsafe {
+            let _os_int_nesting = OSINT_NESTING;
             // for it is the first time to run the os, so schedule the task by prio
             y = OS_UNMAP_TBL[unsafe { OS_RDY_GRP } as usize];
             OS_PRIO_HIGH_RDY = (y << 3) + OS_UNMAP_TBL[*(OS_RDY_TBL.add(y as usize)) as usize];
@@ -54,8 +52,8 @@ pub fn os_start() -> ! {
             OS_PRIO_CUR = OS_PRIO_HIGH_RDY;
             OS_TCB_HIGH_RDY = OS_TCB_PRIO_TBL[OS_PRIO_HIGH_RDY as usize];
             OS_TCB_CUR = OS_TCB_HIGH_RDY;
-            // update the stride 
-            (*OS_TCB_HIGH_RDY).stride += OS_STRIDE_NUM / (OS_LOWEST_PRIO-(*OS_TCB_HIGH_RDY).os_prio as usize);
+            // update the stride
+            (*OS_TCB_HIGH_RDY).stride += OS_STRIDE_NUM / (OS_LOWEST_PRIO - (*OS_TCB_HIGH_RDY).os_prio as usize);
             let _os_prio_high_rdy = OS_PRIO_HIGH_RDY;
             let _os_prio_cur = OS_PRIO_CUR;
             info!("OS_PRIO_HIGH_RDY: {}", OS_PRIO_HIGH_RDY);
@@ -131,7 +129,7 @@ pub fn os_sched() {
             os_sched_new();
             unsafe {
                 OS_TCB_HIGH_RDY = OS_TCB_PRIO_TBL[OS_PRIO_HIGH_RDY as usize];
-                (*OS_TCB_HIGH_RDY).stride += OS_STRIDE_NUM / (OS_LOWEST_PRIO-(*OS_TCB_HIGH_RDY).os_prio as usize);
+                (*OS_TCB_HIGH_RDY).stride += OS_STRIDE_NUM / (OS_LOWEST_PRIO - (*OS_TCB_HIGH_RDY).os_prio as usize);
                 // the new task is no the old task, need to sw
                 if OS_PRIO_CUR != OS_PRIO_HIGH_RDY {
                     OSCtxSw();
@@ -165,10 +163,12 @@ pub fn os_int_exit() {
         if OS_IS_RUNNING && OSINT_NESTING > 0 {
             OSINT_NESTING -= 1;
         }
+        let _os_int_nesting = OSINT_NESTING;
+        // info!("in os_int_exit the OSINT_NESTING is {}", OSINT_NESTING);
         if OS_IS_RUNNING && OSINT_NESTING == 0 {
             os_sched_new();
             OS_TCB_HIGH_RDY = OS_TCB_PRIO_TBL[OS_PRIO_HIGH_RDY as usize];
-            (*OS_TCB_HIGH_RDY).stride += OS_STRIDE_NUM / (OS_LOWEST_PRIO-(*OS_TCB_HIGH_RDY).os_prio as usize);
+            (*OS_TCB_HIGH_RDY).stride += OS_STRIDE_NUM / (OS_LOWEST_PRIO - (*OS_TCB_HIGH_RDY).os_prio as usize);
             if OS_PRIO_CUR != OS_PRIO_HIGH_RDY {
                 // update the stride
                 OSIntCtxSw();
@@ -217,7 +217,7 @@ fn os_task_idle() {
     // here we need a cs
     loop {
         unsafe {
-            info!("execute wfe, I'm in task idle");
+            // info!("execute wfe, I'm in task idle");
             asm!("wfe");
         }
     }
@@ -268,8 +268,8 @@ fn os_sched_new() {
                     }
                     ptr = (*ptr).ostcb_next.unwrap();
                 }
-                info!("in os_sched_new, the piro is {}",OS_PRIO_HIGH_RDY);
-                info!("in os_sched_new, the stride is {}",min_stride);
+                // info!("in os_sched_new, the piro is {}", OS_PRIO_HIGH_RDY);
+                // info!("in os_sched_new, the stride is {}", min_stride);
             }
         });
     }

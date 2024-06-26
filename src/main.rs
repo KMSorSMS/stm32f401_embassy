@@ -17,11 +17,11 @@ use uc_thread::{os_init, os_start, os_task_create, systick_init, OsStk};
 use {defmt_rtt as _, panic_probe as _};
 static EXECUTOR_LOW1: StaticCell<Executor> = StaticCell::new();
 static EXECUTOR_LOW2: StaticCell<Executor> = StaticCell::new();
-const TASK1_STK_SIZE: usize = 1024;
-const TASK2_STK_SIZE: usize = 1024;
+const TASK1_STK_SIZE: usize = 4096;
+const TASK2_STK_SIZE: usize = 4096;
 static mut TASK1_STK: [OsStk; TASK1_STK_SIZE] = [0; TASK1_STK_SIZE];
 static mut TASK2_STK: [OsStk; TASK2_STK_SIZE] = [0; TASK2_STK_SIZE];
-
+const LIMIT_TIME:usize = 20;
 
 #[entry]
 fn main() -> ! {
@@ -57,14 +57,14 @@ fn main() -> ! {
     info!("task_1");
     unsafe{os_task_create(task_1, &mut TASK1_STK[TASK1_STK_SIZE-1], 12);}
     info!("task_2");
-    unsafe{os_task_create(task_2, &mut TASK2_STK[TASK2_STK_SIZE-1], 11);}
+    unsafe{os_task_create(task_2, &mut TASK2_STK[TASK2_STK_SIZE-1], 6);}
     os_start()
 }
 
 fn task_1() {
     let executor = EXECUTOR_LOW1.init(Executor::new());
     executor.run(|spawner| {
-        // unwrap!(spawner.spawn(blink2()));
+        unwrap!(spawner.spawn(blink2()));
         unwrap!(spawner.spawn(blink1()));
     });
 }
@@ -78,7 +78,9 @@ fn task_2() {
 
 #[embassy_executor::task]
 async fn blink1() {
+    let mut count1_times:usize = 0;
     loop {
+        count1_times += 1;
         info!("high1");
         // led.set_high();
         Timer::after_millis(300).await;
@@ -88,38 +90,56 @@ async fn blink1() {
         // led.set_low();
         Timer::after_millis(300).await;
         // block_delay(1000);
+        if count1_times >= LIMIT_TIME {
+            break;
+        }
     }
+    info!("task_1 end with times:{}", count1_times);
 }
 
 #[embassy_executor::task]
 async fn blink2() {
+    let mut count2_times:usize = 0;
     loop {
+        count2_times += 1;
         info!("high2");
         // led.set_high();
-        // Timer::after_millis(300).await;
-        block_delay(100);
+        Timer::after_millis(300).await;
+        // block_delay(100);
 
         info!("low2");
         // led.set_low();
-        block_delay(100);
-        // Timer::after_millis(300).await;
+        // block_delay(100);
+        Timer::after_millis(300).await;
+        if count2_times >= LIMIT_TIME{
+            break;
+        }
     }
+    info!("task_2 end with times:{}", count2_times);
 }
 
 #[embassy_executor::task]
 async fn blink3() {
+    // record it's execute time
+    let mut count3_times:usize = 0;
     loop {
+        count3_times += 1;
         info!("high3");
         // led.set_high();
-        // Timer::after_millis(300).await;
-        block_delay(1000);
+        Timer::after_millis(300).await;
+        // block_delay(1000);
         info!("low3");
         // led.set_low();
-        // Timer::after_millis(300).await;
-        block_delay(1000);
+        Timer::after_millis(300).await;
+        // block_delay(1000);
+        if count3_times >= LIMIT_TIME {
+            break;
+        }
     }
+    info!("task_3 end with times:{}", count3_times);
 }
 
+#[allow(unused)]
 fn block_delay(tick: u32){
     let mut i = 0;
     let mut j = 0;

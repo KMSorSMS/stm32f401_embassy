@@ -21,6 +21,7 @@ pub type Task = fn();
 *              OsErrNoFreeTCB                  if there is no free TCB
 */
 #[derive(PartialEq)]
+#[repr(align(8))]
 pub enum OsErrState {
     OsErrNone,
     OsErrPrioExist,

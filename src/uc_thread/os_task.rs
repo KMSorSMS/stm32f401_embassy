@@ -9,9 +9,9 @@ use super::{OSINT_NESTING, OS_IS_RUNNING, OS_TCB_PRIO_TBL};
 /// create a task/thread
 #[allow(unused)]
 pub fn os_task_create(task: Task, ptos: OsStkPtr, prio: OSTCBPrio) -> OsErrState {
-    info!("I'm in task_1");
+    // info!("I'm in task_1");
     let _is_running = unsafe { OS_IS_RUNNING };
-    info!("if os is running in os_task_create {}", unsafe { OS_IS_RUNNING });
+    // info!("if os is running in os_task_create {}", unsafe { OS_IS_RUNNING });
     // judge if the tcb already allocated
     if critical_section::with(|cs| {
         let _is_running = unsafe { OS_IS_RUNNING };
