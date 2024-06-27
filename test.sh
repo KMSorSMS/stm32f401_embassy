@@ -56,3 +56,7 @@ run_test() {
 }
 
 run_test "test_2e_4t"
+sleep 2
+run_test "test_3e_6t"
+sleep 2
+run_test "test_2e_8t"
