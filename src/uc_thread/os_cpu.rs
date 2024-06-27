@@ -33,13 +33,15 @@ struct UcStk {
     r2: u32,
     r3: u32,
     r12: u32,
-    lr: u32,
+    lr: u32, 
     pc: u32,
     xpsr: u32,
 }
 
 /// initialize the stack of the task :simulation push
 pub fn ostask_stk_init(task: Task, ptos: OsStkPtr) -> OsStkPtr {
+    // align 8
+    let ptos = ((unsafe {ptos.offset(1) } as usize) & 0xFFFFFFF8) as OsStkPtr;
     // we store the data in UcStk and then push it to the stack
     let ptos = unsafe { ptos.offset(-(CONTEXT_STACK_SIZE as isize) as isize) };
     let psp = ptos as *mut UcStk;

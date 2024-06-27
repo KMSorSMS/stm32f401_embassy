@@ -55,14 +55,25 @@ run_test() {
     cat tmp.yaml | grep -E "task_[0-9]+ execute time"
 }
 echo "=============Start testing=============" > record.yml
+
 echo "=============test_2e_4t=============" >> record.yml
 run_test "test_2e_4t" >> record.yml
 echo -e "=============test_2e_4t done=============\n" >> record.yml
+
 sleep 2
+
 echo "=============test_3e_6t=============" >> record.yml
 run_test "test_3e_6t" >> record.yml
 echo -e "=============test_3e_6t done=============\n" >> record.yml
+
 sleep 2
+
 echo "=============test_2e_8t=============" >> record.yml
 run_test "test_2e_8t" >> record.yml
 echo -e "=============test_2e_8t done=============\n" >> record.yml
+
+sleep 2
+
+echo "=============test_2e_20t=============" >> record.yml
+run_test "test_2e_20t" >> record.yml
+echo -e "=============test_2e_20t done=============\n" >> record.yml
