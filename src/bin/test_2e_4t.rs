@@ -56,7 +56,7 @@ fn main() -> ! {
     info!("Hello World!");
     os_init();
     info!("task_1");
-    unsafe{os_task_create(task_1, &mut TASK1_STK[TASK1_STK_SIZE-1], 60);}
+    unsafe{os_task_create(task_1, &mut TASK1_STK[TASK1_STK_SIZE-1], 43);}
     info!("task_2");
     unsafe{os_task_create(task_2, &mut TASK2_STK[TASK2_STK_SIZE-1], 3);}
     os_start()
@@ -99,8 +99,8 @@ async fn blink1() {
     }
     let end = Instant::now();
     let ms = end.duration_since(start).as_millis();
-    info!("task_1 end with times:{}", count1_times);
-    info!("task_1 execute time:{}ms", ms);
+    info!("task_1_1 end with times:{}", count1_times);
+    info!("task_1_1 execute time:{}ms", ms);
 }
 
 #[embassy_executor::task]
@@ -124,8 +124,8 @@ async fn blink2() {
     }
     let end = Instant::now();
     let ms = end.duration_since(start).as_millis();
-    info!("task_2 end with times:{}", count2_times);
-    info!("task_2 execute time:{}ms", ms);
+    info!("task_1_2 end with times:{}", count2_times);
+    info!("task_1_2 execute time:{}ms", ms);
 }
 
 #[embassy_executor::task]
@@ -149,8 +149,8 @@ async fn blink3() {
     }
     let end = Instant::now();
     let ms = end.duration_since(start).as_millis();
-    info!("task_3 end with times:{}", count3_times);
-    info!("task_3 execute time:{}ms", ms);
+    info!("task_2_1 end with times:{}", count3_times);
+    info!("task_2_1 execute time:{}ms", ms);
 }
 
 #[embassy_executor::task]
@@ -174,8 +174,8 @@ async fn blink4() {
     }
     let end = Instant::now();
     let ms = end.duration_since(start).as_millis();
-    info!("task_4 end with times:{}", count4_times);
-    info!("task_4 execute time:{}ms", ms);
+    info!("task_2_2 end with times:{}", count4_times);
+    info!("task_2_2 execute time:{}ms", ms);
 }
 
 

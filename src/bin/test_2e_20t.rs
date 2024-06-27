@@ -56,9 +56,9 @@ fn main() -> ! {
     info!("Hello World!");
     os_init();
     info!("task_1");
-    unsafe{os_task_create(task_1, &mut TASK1_STK[TASK1_STK_SIZE-1], 60);}
+    unsafe{os_task_create(task_1, &mut TASK1_STK[TASK1_STK_SIZE-1], 43);}
     info!("task_2");
-    unsafe{os_task_create(task_2, &mut TASK2_STK[TASK2_STK_SIZE-1], 15);}
+    unsafe{os_task_create(task_2, &mut TASK2_STK[TASK2_STK_SIZE-1], 3);}
     os_start()
 }
 
@@ -103,12 +103,12 @@ async fn blink1_1() {
         count1_times += 1;
         info!("high1");
         // led.set_high();
-        Timer::after_millis(30).await;
+        Timer::after_millis(100).await;
         // block_delay(1000);
 
         info!("low1");
         // led.set_low();
-        Timer::after_millis(30).await;
+        Timer::after_millis(100).await;
         // block_delay(1000);
         if count1_times >= LIMIT_TIME {
             break;
@@ -128,13 +128,13 @@ async fn blink1_2() {
         count2_times += 1;
         info!("high2");
         // led.set_high();
-        Timer::after_millis(30).await;
+        Timer::after_millis(200).await;
         // block_delay(100);
 
         info!("low2");
         // led.set_low();
         // block_delay(100);
-        Timer::after_millis(30).await;
+        Timer::after_millis(200).await;
         if count2_times >= LIMIT_TIME{
             break;
         }
@@ -154,11 +154,11 @@ async fn blink1_3() {
         count3_times += 1;
         info!("high3");
         // led.set_high();
-        Timer::after_millis(30).await;
+        Timer::after_millis(300).await;
         // block_delay(1000);
         info!("low3");
         // led.set_low();
-        Timer::after_millis(30).await;
+        Timer::after_millis(300).await;
         // block_delay(1000);
         if count3_times >= LIMIT_TIME {
             break;
@@ -178,13 +178,13 @@ async fn blink1_4() {
         count4_times += 1;
         info!("high4");
         // led.set_high();
-        Timer::after_millis(150).await;
+        Timer::after_millis(400).await;
         // block_delay(100);
 
         info!("low4");
         // led.set_low();
         // block_delay(100);
-        Timer::after_millis(300).await;
+        Timer::after_millis(400).await;
         if count4_times >= LIMIT_TIME{
             break;
         }
@@ -204,11 +204,11 @@ async fn blink1_5() {
         count5_times += 1;
         info!("high5");
         // led.set_high();
-        Timer::after_millis(30).await;
+        Timer::after_millis(500).await;
         // block_delay(1000);
         info!("low5");
         // led.set_low();
-        Timer::after_millis(50).await;
+        Timer::after_millis(500).await;
         // block_delay(1000);
         if count5_times >= LIMIT_TIME {
             break;
@@ -220,7 +220,6 @@ async fn blink1_5() {
     info!("task_1_5 execute time:{}ms", ms);
 }
 
-
 #[embassy_executor::task]
 async fn blink1_6() {
     // record it's execute time
@@ -230,11 +229,11 @@ async fn blink1_6() {
         count6_times += 1;
         info!("high6");
         // led.set_high();
-        Timer::after_millis(900).await;
+        Timer::after_millis(600).await;
         // block_delay(1000);
         info!("low6");
         // led.set_low();
-        Timer::after_millis(100).await;
+        Timer::after_millis(600).await;
         // block_delay(1000);
         if count6_times >= LIMIT_TIME {
             break;
@@ -256,11 +255,11 @@ async fn blink1_7() {
         count7_times += 1;
         info!("high7");
         // led.set_high();
-        Timer::after_millis(600).await;
+        Timer::after_millis(700).await;
         // block_delay(1000);
         info!("low7");
         // led.set_low();
-        Timer::after_millis(150).await;
+        Timer::after_millis(700).await;
         // block_delay(1000);
         if count7_times >= LIMIT_TIME {
             break;
@@ -272,7 +271,6 @@ async fn blink1_7() {
     info!("task_1_7 execute time:{}ms", ms);
 }
 
-
 #[embassy_executor::task]
 async fn blink1_8() {
     // record it's execute time
@@ -282,11 +280,11 @@ async fn blink1_8() {
         count8_times += 1;
         info!("high8");
         // led.set_high();
-        Timer::after_millis(900).await;
+        Timer::after_millis(800).await;
         // block_delay(1000);
         info!("low8");
         // led.set_low();
-        Timer::after_millis(100).await;
+        Timer::after_millis(800).await;
         // block_delay(1000);
         if count8_times >= LIMIT_TIME {
             break;
@@ -301,301 +299,301 @@ async fn blink1_8() {
 #[embassy_executor::task]
 async fn blink1_9() {
     // record it's execute time
-    let mut count8_times:usize = 0;
+    let mut count9_times:usize = 0;
     let start = Instant::now();
     loop {
-        count8_times += 1;
+        count9_times += 1;
         info!("high8");
         // led.set_high();
         Timer::after_millis(900).await;
         // block_delay(1000);
         info!("low8");
         // led.set_low();
-        Timer::after_millis(100).await;
+        Timer::after_millis(900).await;
         // block_delay(1000);
-        if count8_times >= LIMIT_TIME {
+        if count9_times >= LIMIT_TIME {
             break;
         }
     }
     let end = Instant::now();
     let ms = end.duration_since(start).as_millis();
-    info!("task_1_9 end with times:{}", count8_times);
+    info!("task_1_9 end with times:{}", count9_times);
     info!("task_1_9 execute time:{}ms", ms);
 }
 
 #[embassy_executor::task]
 async fn blink1_10() {
     // record it's execute time
-    let mut count8_times:usize = 0;
+    let mut count10_times:usize = 0;
     let start = Instant::now();
     loop {
-        count8_times += 1;
+        count10_times += 1;
         info!("high8");
         // led.set_high();
-        Timer::after_millis(900).await;
+        Timer::after_millis(1000).await;
         // block_delay(1000);
         info!("low8");
         // led.set_low();
-        Timer::after_millis(100).await;
+        Timer::after_millis(1000).await;
         // block_delay(1000);
-        if count8_times >= LIMIT_TIME {
+        if count10_times >= LIMIT_TIME {
             break;
         }
     }
     let end = Instant::now();
     let ms = end.duration_since(start).as_millis();
-    info!("task_1_10 end with times:{}", count8_times);
+    info!("task_1_10 end with times:{}", count10_times);
     info!("task_1_10 execute time:{}ms", ms);
 }
 
 #[embassy_executor::task]
 async fn blink2_1() {
     // record it's execute time
-    let mut count8_times:usize = 0;
+    let mut count11_times:usize = 0;
     let start = Instant::now();
     loop {
-        count8_times += 1;
+        count11_times += 1;
         info!("high8");
         // led.set_high();
-        Timer::after_millis(900).await;
+        Timer::after_millis(100).await;
         // block_delay(1000);
         info!("low8");
         // led.set_low();
         Timer::after_millis(100).await;
         // block_delay(1000);
-        if count8_times >= LIMIT_TIME {
+        if count11_times >= LIMIT_TIME {
             break;
         }
     }
     let end = Instant::now();
     let ms = end.duration_since(start).as_millis();
-    info!("task_2_1 end with times:{}", count8_times);
+    info!("task_2_1 end with times:{}", count11_times);
     info!("task_2_1 execute time:{}ms", ms);
 }
 
 #[embassy_executor::task]
 async fn blink2_2() {
     // record it's execute time
-    let mut count8_times:usize = 0;
+    let mut count12_times:usize = 0;
     let start = Instant::now();
     loop {
-        count8_times += 1;
+        count12_times += 1;
         info!("high8");
         // led.set_high();
-        Timer::after_millis(900).await;
+        Timer::after_millis(200).await;
         // block_delay(1000);
         info!("low8");
         // led.set_low();
-        Timer::after_millis(100).await;
+        Timer::after_millis(200).await;
         // block_delay(1000);
-        if count8_times >= LIMIT_TIME {
+        if count12_times >= LIMIT_TIME {
             break;
         }
     }
     let end = Instant::now();
     let ms = end.duration_since(start).as_millis();
-    info!("task_2_2 end with times:{}", count8_times);
+    info!("task_2_2 end with times:{}", count12_times);
     info!("task_2_2 execute time:{}ms", ms);
 }
 
 #[embassy_executor::task]
 async fn blink2_3() {
     // record it's execute time
-    let mut count8_times:usize = 0;
+    let mut count13_times:usize = 0;
     let start = Instant::now();
     loop {
-        count8_times += 1;
+        count13_times += 1;
         info!("high8");
         // led.set_high();
-        Timer::after_millis(900).await;
+        Timer::after_millis(300).await;
         // block_delay(1000);
         info!("low8");
         // led.set_low();
-        Timer::after_millis(100).await;
+        Timer::after_millis(300).await;
         // block_delay(1000);
-        if count8_times >= LIMIT_TIME {
+        if count13_times >= LIMIT_TIME {
             break;
         }
     }
     let end = Instant::now();
     let ms = end.duration_since(start).as_millis();
-    info!("task_2_3 end with times:{}", count8_times);
+    info!("task_2_3 end with times:{}", count13_times);
     info!("task_2_3 execute time:{}ms", ms);
 }
 
 #[embassy_executor::task]
 async fn blink2_4() {
     // record it's execute time
-    let mut count8_times:usize = 0;
+    let mut count14_times:usize = 0;
     let start = Instant::now();
     loop {
-        count8_times += 1;
+        count14_times += 1;
         info!("high8");
         // led.set_high();
-        Timer::after_millis(900).await;
+        Timer::after_millis(400).await;
         // block_delay(1000);
         info!("low8");
         // led.set_low();
-        Timer::after_millis(100).await;
+        Timer::after_millis(400).await;
         // block_delay(1000);
-        if count8_times >= LIMIT_TIME {
+        if count14_times >= LIMIT_TIME {
             break;
         }
     }
     let end = Instant::now();
     let ms = end.duration_since(start).as_millis();
-    info!("task_2_4 end with times:{}", count8_times);
+    info!("task_2_4 end with times:{}", count14_times);
     info!("task_2_4 execute time:{}ms", ms);
 }
 
 #[embassy_executor::task]
 async fn blink2_5() {
     // record it's execute time
-    let mut count8_times:usize = 0;
+    let mut count15_times:usize = 0;
     let start = Instant::now();
     loop {
-        count8_times += 1;
+        count15_times += 1;
         info!("high8");
         // led.set_high();
-        Timer::after_millis(900).await;
+        Timer::after_millis(500).await;
         // block_delay(1000);
         info!("low8");
         // led.set_low();
-        Timer::after_millis(100).await;
+        Timer::after_millis(500).await;
         // block_delay(1000);
-        if count8_times >= LIMIT_TIME {
+        if count15_times >= LIMIT_TIME {
             break;
         }
     }
     let end = Instant::now();
     let ms = end.duration_since(start).as_millis();
-    info!("task_2_5 end with times:{}", count8_times);
+    info!("task_2_5 end with times:{}", count15_times);
     info!("task_2_5 execute time:{}ms", ms);
 }
 
 #[embassy_executor::task]
 async fn blink2_6() {
     // record it's execute time
-    let mut count8_times:usize = 0;
+    let mut count16_times:usize = 0;
     let start = Instant::now();
     loop {
-        count8_times += 1;
+        count16_times += 1;
         info!("high8");
         // led.set_high();
-        Timer::after_millis(900).await;
+        Timer::after_millis(600).await;
         // block_delay(1000);
         info!("low8");
         // led.set_low();
-        Timer::after_millis(100).await;
+        Timer::after_millis(600).await;
         // block_delay(1000);
-        if count8_times >= LIMIT_TIME {
+        if count16_times >= LIMIT_TIME {
             break;
         }
     }
     let end = Instant::now();
     let ms = end.duration_since(start).as_millis();
-    info!("task_2_6 end with times:{}", count8_times);
+    info!("task_2_6 end with times:{}", count16_times);
     info!("task_2_6 execute time:{}ms", ms);
 }
 
 #[embassy_executor::task]
 async fn blink2_7() {
     // record it's execute time
-    let mut count8_times:usize = 0;
+    let mut count17_times:usize = 0;
     let start = Instant::now();
     loop {
-        count8_times += 1;
+        count17_times += 1;
         info!("high8");
         // led.set_high();
-        Timer::after_millis(900).await;
+        Timer::after_millis(700).await;
         // block_delay(1000);
         info!("low8");
         // led.set_low();
-        Timer::after_millis(100).await;
+        Timer::after_millis(700).await;
         // block_delay(1000);
-        if count8_times >= LIMIT_TIME {
+        if count17_times >= LIMIT_TIME {
             break;
         }
     }
     let end = Instant::now();
     let ms = end.duration_since(start).as_millis();
-    info!("task_2_7 end with times:{}", count8_times);
+    info!("task_2_7 end with times:{}", count17_times);
     info!("task_2_7 execute time:{}ms", ms);
 }
 
 #[embassy_executor::task]
 async fn blink2_8() {
     // record it's execute time
-    let mut count8_times:usize = 0;
+    let mut count18_times:usize = 0;
     let start = Instant::now();
     loop {
-        count8_times += 1;
+        count18_times += 1;
         info!("high8");
         // led.set_high();
-        Timer::after_millis(900).await;
+        Timer::after_millis(800).await;
         // block_delay(1000);
         info!("low8");
         // led.set_low();
-        Timer::after_millis(100).await;
+        Timer::after_millis(800).await;
         // block_delay(1000);
-        if count8_times >= LIMIT_TIME {
+        if count18_times >= LIMIT_TIME {
             break;
         }
     }
     let end = Instant::now();
     let ms = end.duration_since(start).as_millis();
-    info!("task_2_8 end with times:{}", count8_times);
+    info!("task_2_8 end with times:{}", count18_times);
     info!("task_2_8 execute time:{}ms", ms);
 }
 
 #[embassy_executor::task]
 async fn blink2_9() {
     // record it's execute time
-    let mut count8_times:usize = 0;
+    let mut count19_times:usize = 0;
     let start = Instant::now();
     loop {
-        count8_times += 1;
+        count19_times += 1;
         info!("high8");
         // led.set_high();
         Timer::after_millis(900).await;
         // block_delay(1000);
         info!("low8");
         // led.set_low();
-        Timer::after_millis(100).await;
+        Timer::after_millis(900).await;
         // block_delay(1000);
-        if count8_times >= LIMIT_TIME {
+        if count19_times >= LIMIT_TIME {
             break;
         }
     }
     let end = Instant::now();
     let ms = end.duration_since(start).as_millis();
-    info!("task_2_9 end with times:{}", count8_times);
+    info!("task_2_9 end with times:{}", count19_times);
     info!("task_2_9 execute time:{}ms", ms);
 }
 
 #[embassy_executor::task]
 async fn blink2_10() {
     // record it's execute time
-    let mut count8_times:usize = 0;
+    let mut count20_times:usize = 0;
     let start = Instant::now();
     loop {
-        count8_times += 1;
+        count20_times += 1;
         info!("high8");
         // led.set_high();
-        Timer::after_millis(900).await;
+        Timer::after_millis(1000).await;
         // block_delay(1000);
         info!("low8");
         // led.set_low();
-        Timer::after_millis(100).await;
+        Timer::after_millis(1000).await;
         // block_delay(1000);
-        if count8_times >= LIMIT_TIME {
+        if count20_times >= LIMIT_TIME {
             break;
         }
     }
     let end = Instant::now();
     let ms = end.duration_since(start).as_millis();
-    info!("task_10 end with times:{}", count8_times);
-    info!("task_10 execute time:{}ms", ms);
+    info!("task_2_10 end with times:{}", count20_times);
+    info!("task_2_10 execute time:{}ms", ms);
 }
 
 #[allow(unused)]
@@ -608,4 +606,4 @@ fn block_delay(tick: u32){
             j += 1;
         }
     }
-} 
+}

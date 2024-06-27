@@ -181,7 +181,7 @@ pub fn os_int_exit() {
 #[allow(unused)]
 fn os_time_tick() {}
 
-/// init the TCB list(OS_TCB_FREE_LIST&OS_TCB_LIST)
+/// init the TCB list(OS_TCB_FREE_LIST &OS_TCB_LIST)
 fn os_init_tcblist() {
     // can't use OSTCBPtr because it's not mut
     let mut ptcb1: OSTCBPtr;

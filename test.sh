@@ -20,7 +20,7 @@ run_test() {
     CARGO_PID=$!
     echo "Cargo PID: $CARGO_PID"
     # 最大等待时间（秒）
-    MAX_WAIT=2
+    MAX_WAIT=10
     WAITED=0
     # # 查找并终止probe-rs run进程
     # sleep 2
@@ -52,7 +52,7 @@ run_test() {
     done
 
     # 继续执行脚本的其他部分
-    cat tmp.yaml | grep -E "task_[0-9]+ execute time"
+    cat tmp.yaml | grep -E "task(_[0-9]+)* execute time"
 }
 echo "=============Start testing=============" > record.yml
 
