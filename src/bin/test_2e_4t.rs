@@ -3,6 +3,7 @@
 // #![feature(impl_trait_in_assoc_type)]
 // use the asm code.
 // the rust version of uc's thread part
+#[path ="../uc_thread/mod.rs"]
 pub mod uc_thread;
 
 use cortex_m_rt::entry;
@@ -21,7 +22,7 @@ const TASK1_STK_SIZE: usize = 512;
 const TASK2_STK_SIZE: usize = 512;
 static mut TASK1_STK: [OsStk; TASK1_STK_SIZE] = [0; TASK1_STK_SIZE];
 static mut TASK2_STK: [OsStk; TASK2_STK_SIZE] = [0; TASK2_STK_SIZE];
-const LIMIT_TIME:usize = 100;
+const LIMIT_TIME:usize = 25;
 
 #[entry]
 fn main() -> ! {
