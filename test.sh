@@ -14,13 +14,13 @@ run_test() {
     PREV_SIZE=0
 
     # 检查文件大小的时间间隔（秒）
-    INTERVAL=1
+    INTERVAL=2
 
     # 获取cargo命令的PID
     CARGO_PID=$!
     echo "Cargo PID: $CARGO_PID"
     # 最大等待时间（秒）
-    MAX_WAIT=10
+    MAX_WAIT=3
     WAITED=0
     # # 查找并终止probe-rs run进程
     # sleep 2
@@ -52,29 +52,21 @@ run_test() {
     done
 
     # 继续执行脚本的其他部分
+    # 得到程序执行时间的信息
     cat tmp.yaml | grep -E "task(_[0-9]+)* execute time"
 }
 clear
 echo "=============Start testing=============" > record.yml
 
-echo "=============test_2e_4t=============" >> record.yml
-run_test "test_2e_4t" >> record.yml
-echo -e "=============test_2e_4t done=============\n" >> record.yml
+# 定义一个数组，包含所有测试
+tests=("test_2e_4t" "test_3e_6t" "test_2e_8t" "test_2e_20t")
 
-sleep 2
+# 循环遍历数组，执行测试
+for test in "${tests[@]}"; do
+    echo "=============${test}=============" >> record.yml
+    run_test "$test" >> record.yml
+    echo -e "=============${test} done=============\n" >> record.yml
+    sleep 1
+done
 
-echo "=============test_3e_6t=============" >> record.yml
-run_test "test_3e_6t" >> record.yml
-echo -e "=============test_3e_6t done=============\n" >> record.yml
-
-sleep 2
-
-echo "=============test_2e_8t=============" >> record.yml
-run_test "test_2e_8t" >> record.yml
-echo -e "=============test_2e_8t done=============\n" >> record.yml
-
-sleep 2
-
-echo "=============test_2e_20t=============" >> record.yml
-run_test "test_2e_20t" >> record.yml
-echo -e "=============test_2e_20t done=============\n" >> record.yml
+# 为了方便画出表格图，单独把时间信息提取出来，放到time.txt文件中

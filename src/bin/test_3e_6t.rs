@@ -97,17 +97,26 @@ fn task_3() {
 
 #[embassy_executor::task]
 async fn dead_task1() {
-    loop{}
+        loop{
+        Timer::after_millis(3).await;
+        block_delay(100);
+    }
 }
 
 #[embassy_executor::task]
 async fn dead_task2() {
-    loop{}
+        loop{
+        Timer::after_millis(3).await;
+        block_delay(100);
+    }
 }
 
 #[embassy_executor::task]
 async fn dead_task3() {
-    loop{}
+        loop{
+        Timer::after_millis(3).await;
+        block_delay(100);
+    }
 }
 
 #[embassy_executor::task]
