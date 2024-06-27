@@ -1,3 +1,59 @@
 =============Start testing=============
+=============test_2e_4t=============
+Cargo PID: 531964
+Cargo command terminated due to inactivity.
+INFO  task_3 execute time:1574ms
+INFO  task_4 execute time:8315ms
+INFO  task_1 execute time:26940ms
+INFO  task_2 execute time:26940ms
+=============test_2e_4t done=============
+
+=============test_3e_6t=============
+Cargo PID: 532344
+Cargo command terminated due to inactivity.
+INFO  task_5 execute time:441ms
+INFO  task_3 execute time:2379ms
+INFO  task_4 execute time:12059ms
+INFO  task_6 execute time:28479ms
+INFO  task_1 execute time:35900ms
+INFO  task_2 execute time:35900ms
+=============test_3e_6t done=============
+
+=============test_2e_8t=============
+Cargo PID: 532748
+Cargo command terminated due to inactivity.
+INFO  task_3 execute time:1639ms
+INFO  task_5 execute time:2161ms
+INFO  task_4 execute time:11339ms
+INFO  task_7 execute time:18879ms
+INFO  task_1 execute time:21820ms
+INFO  task_2 execute time:21820ms
+INFO  task_8 execute time:25379ms
+INFO  task_6 execute time:25379ms
+=============test_2e_8t done=============
+
 =============test_2e_20t=============
-Cargo PID: 37271
+Cargo PID: 533096
+Cargo command terminated due to inactivity.
+INFO  task_1_3 execute time:21820ms
+INFO  task_1_2 execute time:21820ms
+INFO  task_1_1 execute time:21820ms
+INFO  task_10 execute time:25379ms
+INFO  task_2_9 execute time:25379ms
+INFO  task_2_8 execute time:25380ms
+INFO  task_2_7 execute time:25380ms
+INFO  task_2_6 execute time:25380ms
+INFO  task_2_5 execute time:25380ms
+INFO  task_2_4 execute time:25381ms
+INFO  task_2_3 execute time:25381ms
+INFO  task_2_2 execute time:25381ms
+INFO  task_2_1 execute time:25381ms
+INFO  task_1_5 execute time:33999ms
+INFO  task_1_10 execute time:67999ms
+INFO  task_1_9 execute time:67999ms
+INFO  task_1_8 execute time:68000ms
+INFO  task_1_7 execute time:68000ms
+INFO  task_1_6 execute time:68000ms
+INFO  task_1_4 execute time:68000ms
+=============test_2e_20t done=============
+

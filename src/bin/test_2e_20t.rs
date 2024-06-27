@@ -594,8 +594,8 @@ async fn blink2_10() {
     }
     let end = Instant::now();
     let ms = end.duration_since(start).as_millis();
-    info!("task_10 end with times:{}", count8_times);
-    info!("task_10 execute time:{}ms", ms);
+    info!("task_2_10 end with times:{}", count8_times);
+    info!("task_2_10 execute time:{}ms", ms);
 }
 
 #[allow(unused)]
