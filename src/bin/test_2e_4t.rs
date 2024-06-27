@@ -67,6 +67,7 @@ fn task_1() {
     executor.run(|spawner| {
         unwrap!(spawner.spawn(blink2()));
         unwrap!(spawner.spawn(blink1()));
+        unwrap!(spawner.spawn(dead_task1()));
     });
 }
 
@@ -75,6 +76,7 @@ fn task_2() {
     executor.run(|spawner| {
         unwrap!(spawner.spawn(blink3()));
         unwrap!(spawner.spawn(blink4()));
+        unwrap!(spawner.spawn(dead_task2()));
     });
 }
 
@@ -101,6 +103,11 @@ async fn blink1() {
     let ms = end.duration_since(start).as_millis();
     info!("task_1_1 end with times:{}", count1_times);
     info!("task_1_1 execute time:{}ms", ms);
+}
+
+#[embassy_executor::task]
+async fn dead_task1() {
+    loop{}
 }
 
 #[embassy_executor::task]
@@ -151,6 +158,11 @@ async fn blink3() {
     let ms = end.duration_since(start).as_millis();
     info!("task_2_1 end with times:{}", count3_times);
     info!("task_2_1 execute time:{}ms", ms);
+}
+
+#[embassy_executor::task]
+async fn dead_task2(){
+    loop{}
 }
 
 #[embassy_executor::task]

@@ -72,6 +72,7 @@ fn task_1() {
     executor.run(|spawner| {
         unwrap!(spawner.spawn(blink2()));
         unwrap!(spawner.spawn(blink1()));
+        unwrap!(spawner.spawn(dead_task1()));
     });
 }
 
@@ -80,6 +81,7 @@ fn task_2() {
     executor.run(|spawner| {
         unwrap!(spawner.spawn(blink3()));
         unwrap!(spawner.spawn(blink4()));
+        unwrap!(spawner.spawn(dead_task2()));
     });
 }
 
@@ -89,7 +91,23 @@ fn task_3() {
     executor.run(|spawner| {
         unwrap!(spawner.spawn(blink5()));
         unwrap!(spawner.spawn(blink6()));
+        unwrap!(spawner.spawn(dead_task3()));
     });
+}
+
+#[embassy_executor::task]
+async fn dead_task1() {
+    loop{}
+}
+
+#[embassy_executor::task]
+async fn dead_task2() {
+    loop{}
+}
+
+#[embassy_executor::task]
+async fn dead_task3() {
+    loop{}
 }
 
 #[embassy_executor::task]
