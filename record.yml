@@ -1,0 +1,34 @@
+=============Start testing=============
+=============test_2e_4t=============
+Cargo PID: 449790
+Cargo command terminated due to inactivity.
+INFO  task_3 execute time:1574ms
+INFO  task_4 execute time:8315ms
+INFO  task_1 execute time:26940ms
+INFO  task_2 execute time:26940ms
+=============test_2e_4t done=============
+
+=============test_3e_6t=============
+Cargo PID: 450128
+Cargo command terminated due to inactivity.
+INFO  task_5 execute time:441ms
+INFO  task_3 execute time:2379ms
+INFO  task_4 execute time:12059ms
+INFO  task_6 execute time:28479ms
+INFO  task_1 execute time:35900ms
+INFO  task_2 execute time:35900ms
+=============test_3e_6t done=============
+
+=============test_2e_8t=============
+Cargo PID: 450514
+Cargo command terminated due to inactivity.
+INFO  task_3 execute time:1639ms
+INFO  task_5 execute time:2161ms
+INFO  task_4 execute time:11339ms
+INFO  task_7 execute time:18879ms
+INFO  task_1 execute time:21820ms
+INFO  task_2 execute time:21820ms
+INFO  task_8 execute time:25379ms
+INFO  task_6 execute time:25379ms
+=============test_2e_8t done=============
+
