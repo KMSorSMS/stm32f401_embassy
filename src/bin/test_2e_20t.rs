@@ -56,9 +56,9 @@ fn main() -> ! {
     info!("Hello World!");
     os_init();
     info!("task_1");
-    unsafe{os_task_create(task_1, &mut TASK1_STK[TASK1_STK_SIZE-2], 60);}
+    unsafe{os_task_create(task_1, &mut TASK1_STK[TASK1_STK_SIZE-1], 60);}
     info!("task_2");
-    unsafe{os_task_create(task_2, &mut TASK2_STK[TASK2_STK_SIZE-2], 15);}
+    unsafe{os_task_create(task_2, &mut TASK2_STK[TASK2_STK_SIZE-1], 15);}
     os_start()
 }
 
