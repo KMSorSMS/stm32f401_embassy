@@ -1,2 +1,4 @@
 /target
+./tmp*
+tmp.yaml
 .gdb_history
