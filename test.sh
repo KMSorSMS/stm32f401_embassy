@@ -54,6 +54,7 @@ run_test() {
     # 继续执行脚本的其他部分
     cat tmp.yaml | grep -E "task(_[0-9]+)* execute time"
 }
+clear
 echo "=============Start testing=============" > record.yml
 
 echo "=============test_2e_4t=============" >> record.yml

@@ -44,9 +44,6 @@ PendSV_Handler:
     MRS     R0, PSP                                             
     STMFD   R0!, {{R4-R11, R14}}         
 
-    
-    
-    
     LDR     R5, =OS_TCB_CUR
     LDR     R1, [R5]
     STR     R0, [R1]                                            
@@ -58,23 +55,15 @@ PendSV_Handler:
     LDR     R1, =OS_PRIO_HIGH_RDY
     LDRB    R2, [R1]
     STRB    R2, [R0]
-
-    
-    
     LDR     R1, =OS_TCB_HIGH_RDY
     LDR     R2, [R1]
     STR     R2, [R5]
-
     ORR     LR,  R4, #0x04                                      
-    LDR     R0,  [R2]                                           
+    LDR     R0,  [R2]
+
     LDMFD   R0!, {{R4-R11, R14}}                                  
     MSR     PSP, R0                                             
-
     MOV     R2, #0                                              
-    
-    
-    
-    
     CPSIE   I
     BX      LR                                                  
 
@@ -82,58 +71,31 @@ PendSV_Handler:
 .thumb_func
 OSStartHighRdy:
     CPSID   I                                                   
-    
-    
-
     LDR     R0,=NVIC_SYSPRI14
-
-    
-    
     LDR     R1, =NVIC_PENDSV_PRI
     STRB    R1, [R0]
-
     MOVS    R0, #0                                              
     MSR     PSP, R0
-
-
-    
-    
     LDR     R0, =OS_CPU_EXCEPT_STK_BASE
     LDR     R1, [R0]
     MSR     MSP, R1
-
-    
-
     LDR     R0, =OS_IS_RUNNING                                      
     MOVS    R1, #1
     STRB    R1, [R0]
-
-    
-    
     LDR     R0, =OS_PRIO_CUR
-    
-    
     LDR     R1, =OS_PRIO_HIGH_RDY
     LDRB    R2, [R1]
     STRB    R2, [R0]
-
-    
-    
     LDR     R0, =OS_TCB_CUR
-    
-    
     LDR     R1, =OS_TCB_HIGH_RDY
     LDR     R2, [R1]
     STR     R2, [R0]
-
     LDR     R0, [R2]                                            
     MSR     PSP, R0                                             
-
     MRS     R0, CONTROL
     ORR     R0, R0, #2
     MSR     CONTROL, R0
     ISB                                                         
-
     LDMFD    SP!, {{R4-R11, LR}}                                  
     LDMFD    SP!, {{R0-R3}}                                       
     LDMFD    SP!, {{R12, LR}}                                     
