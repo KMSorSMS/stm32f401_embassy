@@ -128,7 +128,7 @@ async fn blink1() {
         info!("high1");
         // led.set_high();
         Timer::after_millis(30).await;
-        // block_delay(1000);
+        block_delay(10);
 
         info!("low1");
         // led.set_low();
@@ -153,7 +153,7 @@ async fn blink2() {
         info!("high2");
         // led.set_high();
         Timer::after_millis(30).await;
-        // block_delay(100);
+        block_delay(10);
 
         info!("low2");
         // led.set_low();
@@ -179,7 +179,7 @@ async fn blink3() {
         info!("high3");
         // led.set_high();
         Timer::after_millis(30).await;
-        // block_delay(1000);
+        block_delay(10);
         info!("low3");
         // led.set_low();
         Timer::after_millis(30).await;
@@ -202,13 +202,13 @@ async fn blink4() {
         count4_times += 1;
         info!("high4");
         // led.set_high();
-        Timer::after_millis(150).await;
-        // block_delay(100);
+        Timer::after_millis(30).await;
+        block_delay(10);
 
         info!("low4");
         // led.set_low();
         // block_delay(100);
-        Timer::after_millis(300).await;
+        Timer::after_millis(60).await;
         if count4_times >= LIMIT_TIME{
             break;
         }
@@ -229,7 +229,7 @@ async fn blink5() {
         info!("high5");
         // led.set_high();
         Timer::after_millis(3).await;
-        // block_delay(1000);
+        block_delay(10);
         info!("low5");
         // led.set_low();
         Timer::after_millis(5).await;
@@ -254,11 +254,11 @@ async fn blink6() {
         count6_times += 1;
         info!("high6");
         // led.set_high();
-        Timer::after_millis(900).await;
-        // block_delay(1000);
+        Timer::after_millis(90).await;
+        block_delay(10);
         info!("low6");
         // led.set_low();
-        Timer::after_millis(100).await;
+        Timer::after_millis(10).await;
         // block_delay(1000);
         if count6_times >= LIMIT_TIME {
             break;
@@ -270,8 +270,6 @@ async fn blink6() {
     info!("task_3_2 execute time:{}ms", ms);
 }
 
-
-
 #[allow(unused)]
 fn block_delay(tick: u32){
     let mut i = 0;
@@ -282,4 +280,4 @@ fn block_delay(tick: u32){
             j += 1;
         }
     }
-} 
+}

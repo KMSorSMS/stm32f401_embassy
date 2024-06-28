@@ -1,10 +1,59 @@
 =============Start testing=============
 =============test_2e_4t=============
-Cargo PID: 8567
+Cargo PID: 25488
 Cargo command terminated due to inactivity.
-INFO  task_2_1 execute time:271ms
-INFO  task_2_2 execute time:354ms
-INFO  task_1_1 execute time:960ms
-INFO  task_1_2 execute time:960ms
+INFO  task_2_1 execute time:204ms
+INFO  task_2_2 execute time:273ms
+INFO  task_1_1 execute time:273ms
+INFO  task_1_2 execute time:273ms
 =============test_2e_4t done=============
+
+=============test_3e_6t=============
+Cargo PID: 25790
+Cargo command terminated due to inactivity.
+INFO  task_3_1 execute time:279ms
+INFO  task_2_1 execute time:3137ms
+INFO  task_2_2 execute time:4637ms
+INFO  task_1_1 execute time:5509ms
+INFO  task_1_2 execute time:5509ms
+INFO  task_3_2 execute time:7302ms
+=============test_3e_6t done=============
+
+=============test_2e_8t=============
+Cargo PID: 26091
+Cargo command terminated due to inactivity.
+INFO  task_2_1 execute time:2296ms
+INFO  task_2_3 execute time:2834ms
+INFO  task_1_1 execute time:3892ms
+INFO  task_1_2 execute time:3893ms
+INFO  task_2_2 execute time:14850ms
+INFO  task_2_5 execute time:22451ms
+INFO  task_2_6 execute time:27300ms
+INFO  task_2_4 execute time:27300ms
+=============test_2e_8t done=============
+
+=============test_2e_20t=============
+Cargo PID: 26750
+Cargo command terminated due to inactivity.
+INFO  task_2_1 execute time:561ms
+INFO  task_1_1 execute time:560ms
+INFO  task_2_2 execute time:1910ms
+INFO  task_2_3 execute time:2339ms
+INFO  task_2_4 execute time:2821ms
+INFO  task_2_5 execute time:3312ms
+INFO  task_2_6 execute time:3878ms
+INFO  task_1_2 execute time:3511ms
+INFO  task_1_3 execute time:3940ms
+INFO  task_2_7 execute time:5081ms
+INFO  task_2_8 execute time:5609ms
+INFO  task_2_9 execute time:6068ms
+INFO  task_2_10 execute time:6609ms
+INFO  task_1_4 execute time:6806ms
+INFO  task_1_5 execute time:9702ms
+INFO  task_1_6 execute time:10279ms
+INFO  task_1_7 execute time:12942ms
+INFO  task_1_8 execute time:15999ms
+INFO  task_1_9 execute time:16452ms
+INFO  task_1_10 execute time:19399ms
+=============test_2e_20t done=============
 

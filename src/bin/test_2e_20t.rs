@@ -120,12 +120,12 @@ async fn blink1_1() {
         count1_times += 1;
         info!("high1");
         // led.set_high();
-        Timer::after_millis(100).await;
-        // block_delay(1000);
+        Timer::after_millis(10).await;
+        block_delay(10);
 
         info!("low1");
         // led.set_low();
-        Timer::after_millis(100).await;
+        Timer::after_millis(10).await;
         // block_delay(1000);
         if count1_times >= LIMIT_TIME {
             break;
@@ -145,13 +145,13 @@ async fn blink1_2() {
         count2_times += 1;
         info!("high2");
         // led.set_high();
-        Timer::after_millis(200).await;
-        // block_delay(100);
+        Timer::after_millis(20).await;
+        block_delay(10);
 
         info!("low2");
         // led.set_low();
         // block_delay(100);
-        Timer::after_millis(200).await;
+        Timer::after_millis(20).await;
         if count2_times >= LIMIT_TIME{
             break;
         }
@@ -171,11 +171,11 @@ async fn blink1_3() {
         count3_times += 1;
         info!("high3");
         // led.set_high();
-        Timer::after_millis(300).await;
-        // block_delay(1000);
+        Timer::after_millis(30).await;
+        block_delay(10);
         info!("low3");
         // led.set_low();
-        Timer::after_millis(300).await;
+        Timer::after_millis(30).await;
         // block_delay(1000);
         if count3_times >= LIMIT_TIME {
             break;
@@ -195,13 +195,13 @@ async fn blink1_4() {
         count4_times += 1;
         info!("high4");
         // led.set_high();
-        Timer::after_millis(400).await;
-        // block_delay(100);
+        Timer::after_millis(40).await;
+        block_delay(10);
 
         info!("low4");
         // led.set_low();
         // block_delay(100);
-        Timer::after_millis(400).await;
+        Timer::after_millis(40).await;
         if count4_times >= LIMIT_TIME{
             break;
         }
@@ -221,11 +221,11 @@ async fn blink1_5() {
         count5_times += 1;
         info!("high5");
         // led.set_high();
-        Timer::after_millis(500).await;
-        // block_delay(1000);
+        Timer::after_millis(50).await;
+        block_delay(10);
         info!("low5");
         // led.set_low();
-        Timer::after_millis(500).await;
+        Timer::after_millis(50).await;
         // block_delay(1000);
         if count5_times >= LIMIT_TIME {
             break;
@@ -246,11 +246,11 @@ async fn blink1_6() {
         count6_times += 1;
         info!("high6");
         // led.set_high();
-        Timer::after_millis(600).await;
-        // block_delay(1000);
+        Timer::after_millis(60).await;
+        block_delay(10);
         info!("low6");
         // led.set_low();
-        Timer::after_millis(600).await;
+        Timer::after_millis(60).await;
         // block_delay(1000);
         if count6_times >= LIMIT_TIME {
             break;
@@ -272,11 +272,11 @@ async fn blink1_7() {
         count7_times += 1;
         info!("high7");
         // led.set_high();
-        Timer::after_millis(700).await;
-        // block_delay(1000);
+        Timer::after_millis(70).await;
+        block_delay(10);
         info!("low7");
         // led.set_low();
-        Timer::after_millis(700).await;
+        Timer::after_millis(70).await;
         // block_delay(1000);
         if count7_times >= LIMIT_TIME {
             break;
@@ -297,11 +297,11 @@ async fn blink1_8() {
         count8_times += 1;
         info!("high8");
         // led.set_high();
-        Timer::after_millis(800).await;
-        // block_delay(1000);
+        Timer::after_millis(80).await;
+        block_delay(10);
         info!("low8");
         // led.set_low();
-        Timer::after_millis(800).await;
+        Timer::after_millis(80).await;
         // block_delay(1000);
         if count8_times >= LIMIT_TIME {
             break;
@@ -322,11 +322,11 @@ async fn blink1_9() {
         count9_times += 1;
         info!("high8");
         // led.set_high();
-        Timer::after_millis(900).await;
-        // block_delay(1000);
+        Timer::after_millis(90).await;
+        block_delay(10);
         info!("low8");
         // led.set_low();
-        Timer::after_millis(900).await;
+        Timer::after_millis(90).await;
         // block_delay(1000);
         if count9_times >= LIMIT_TIME {
             break;
@@ -347,11 +347,11 @@ async fn blink1_10() {
         count10_times += 1;
         info!("high8");
         // led.set_high();
-        Timer::after_millis(1000).await;
-        // block_delay(1000);
+        Timer::after_millis(100).await;
+        block_delay(10);
         info!("low8");
         // led.set_low();
-        Timer::after_millis(1000).await;
+        Timer::after_millis(100).await;
         // block_delay(1000);
         if count10_times >= LIMIT_TIME {
             break;
@@ -372,11 +372,11 @@ async fn blink2_1() {
         count11_times += 1;
         info!("high8");
         // led.set_high();
-        Timer::after_millis(100).await;
-        // block_delay(1000);
+        Timer::after_millis(10).await;
+        block_delay(10);
         info!("low8");
         // led.set_low();
-        Timer::after_millis(100).await;
+        Timer::after_millis(10).await;
         // block_delay(1000);
         if count11_times >= LIMIT_TIME {
             break;
@@ -397,11 +397,11 @@ async fn blink2_2() {
         count12_times += 1;
         info!("high8");
         // led.set_high();
-        Timer::after_millis(200).await;
-        // block_delay(1000);
+        Timer::after_millis(20).await;
+        block_delay(10);
         info!("low8");
         // led.set_low();
-        Timer::after_millis(200).await;
+        Timer::after_millis(20).await;
         // block_delay(1000);
         if count12_times >= LIMIT_TIME {
             break;
@@ -422,11 +422,11 @@ async fn blink2_3() {
         count13_times += 1;
         info!("high8");
         // led.set_high();
-        Timer::after_millis(300).await;
-        // block_delay(1000);
+        Timer::after_millis(30).await;
+        block_delay(10);
         info!("low8");
         // led.set_low();
-        Timer::after_millis(300).await;
+        Timer::after_millis(30).await;
         // block_delay(1000);
         if count13_times >= LIMIT_TIME {
             break;
@@ -447,11 +447,11 @@ async fn blink2_4() {
         count14_times += 1;
         info!("high8");
         // led.set_high();
-        Timer::after_millis(400).await;
-        // block_delay(1000);
+        Timer::after_millis(40).await;
+        block_delay(10);
         info!("low8");
         // led.set_low();
-        Timer::after_millis(400).await;
+        Timer::after_millis(40).await;
         // block_delay(1000);
         if count14_times >= LIMIT_TIME {
             break;
@@ -472,11 +472,11 @@ async fn blink2_5() {
         count15_times += 1;
         info!("high8");
         // led.set_high();
-        Timer::after_millis(500).await;
-        // block_delay(1000);
+        Timer::after_millis(50).await;
+        block_delay(10);
         info!("low8");
         // led.set_low();
-        Timer::after_millis(500).await;
+        Timer::after_millis(50).await;
         // block_delay(1000);
         if count15_times >= LIMIT_TIME {
             break;
@@ -497,11 +497,11 @@ async fn blink2_6() {
         count16_times += 1;
         info!("high8");
         // led.set_high();
-        Timer::after_millis(600).await;
-        // block_delay(1000);
+        Timer::after_millis(60).await;
+        block_delay(10);
         info!("low8");
         // led.set_low();
-        Timer::after_millis(600).await;
+        Timer::after_millis(60).await;
         // block_delay(1000);
         if count16_times >= LIMIT_TIME {
             break;
@@ -522,11 +522,11 @@ async fn blink2_7() {
         count17_times += 1;
         info!("high8");
         // led.set_high();
-        Timer::after_millis(700).await;
-        // block_delay(1000);
+        Timer::after_millis(70).await;
+        block_delay(10);
         info!("low8");
         // led.set_low();
-        Timer::after_millis(700).await;
+        Timer::after_millis(70).await;
         // block_delay(1000);
         if count17_times >= LIMIT_TIME {
             break;
@@ -547,11 +547,11 @@ async fn blink2_8() {
         count18_times += 1;
         info!("high8");
         // led.set_high();
-        Timer::after_millis(800).await;
-        // block_delay(1000);
+        Timer::after_millis(80).await;
+        block_delay(10);
         info!("low8");
         // led.set_low();
-        Timer::after_millis(800).await;
+        Timer::after_millis(80).await;
         // block_delay(1000);
         if count18_times >= LIMIT_TIME {
             break;
@@ -572,11 +572,11 @@ async fn blink2_9() {
         count19_times += 1;
         info!("high8");
         // led.set_high();
-        Timer::after_millis(900).await;
-        // block_delay(1000);
+        Timer::after_millis(90).await;
+        block_delay(10);
         info!("low8");
         // led.set_low();
-        Timer::after_millis(900).await;
+        Timer::after_millis(90).await;
         // block_delay(1000);
         if count19_times >= LIMIT_TIME {
             break;
@@ -597,11 +597,11 @@ async fn blink2_10() {
         count20_times += 1;
         info!("high8");
         // led.set_high();
-        Timer::after_millis(1000).await;
-        // block_delay(1000);
+        Timer::after_millis(100).await;
+        block_delay(10);
         info!("low8");
         // led.set_low();
-        Timer::after_millis(1000).await;
+        Timer::after_millis(100).await;
         // block_delay(1000);
         if count20_times >= LIMIT_TIME {
             break;
