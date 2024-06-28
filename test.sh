@@ -59,20 +59,51 @@ run_test() {
     # 继续执行脚本的其他部分
     # 得到程序执行时间的信息
     cat tmp.yaml | grep -E "task(_[0-9]+)* execute time"
+    awk '
+    /INFO  task(_[0-9]+)* *execute *time/ {
+        # 使用正则表达式匹配task名称和执行次数
+        match($0, /(task(_[0-9]+)*) *execute *time: *([0-9]+)/, arr)
+        # 使用task名称作为键,存储执行次数
+        tasks[arr[1]] = arr[3]
+    }
+    END {
+        # 遍历数组,打印每个task的执行时间
+        for (task in tasks) {
+            printf("%-10s ",task) 
+        }
+        # 换行
+        printf("\n") 
+        for (task in tasks) {
+            printf("%-10s ",tasks[task])
+        }
+        # # 换行
+        # printf("\n") 
+    }' tmp.yaml
     # 需要捕获各个task最新打印的task(_[0-9]+)* counted execute times:
     # 需要捕获各个task最新的打印，也就是先按照task名字进行分组，然后选取各个组里面最后一个
     awk '
-    /INFO  task(_[0-9]+)* counted execute times:/ {
+    /INFO  task(_[0-9]+)* *counted *execute *times:/ {
         # 使用正则表达式匹配task名称和执行次数
-        match($0, /(task(_[0-9]+)*) counted execute times: *([0-9]+)/, arr)
+        match($0, /(task(_[0-9]+)*) *counted *execute *times: *([0-9]+)/, arr)
         # 使用task名称作为键,存储执行次数
         tasks[arr[1]] = arr[3]
     }
     END {
         # 遍历数组,打印每个task的最后一次执行次数
         for (task in tasks) {
-            print task " counted execute times: " tasks[task]
+            print "INFO  " task " counted execute times: " tasks[task]
         }
+         # 遍历数组,打印每个task的最后一次执行次数
+        for (task in tasks) {
+            printf("%-10s ", task)
+        }
+        # 换行
+        printf("\n") 
+        for (task in tasks) {
+            printf("%-10s ",tasks[task])
+        }
+        # 换行
+        printf("\n") 
     }
 ' tmp.yaml
 
@@ -95,5 +126,3 @@ for test in "${tests[@]}"; do
     echo -e "=============${test} done=============\n" >> record.yml
     sleep 1
 done
-
-# 为了方便画出表格图，单独把时间信息提取出来，放到time.txt文件中

@@ -1,15 +1,18 @@
 =============Start testing=============
 =============test_2e_4t=============
-Cargo PID: 25488
+Cargo PID: 51576
 Cargo command terminated due to inactivity.
 INFO  task_2_1 execute time:204ms
 INFO  task_2_2 execute time:273ms
 INFO  task_1_1 execute time:273ms
 INFO  task_1_2 execute time:273ms
+task_1_1   task_1_2   task_2_1   task_2_2   
+273        273        204        273        
+
 =============test_2e_4t done=============
 
 =============test_3e_6t=============
-Cargo PID: 25790
+Cargo PID: 51795
 Cargo command terminated due to inactivity.
 INFO  task_3_1 execute time:279ms
 INFO  task_2_1 execute time:3137ms
@@ -17,23 +20,29 @@ INFO  task_2_2 execute time:4637ms
 INFO  task_1_1 execute time:5509ms
 INFO  task_1_2 execute time:5509ms
 INFO  task_3_2 execute time:7302ms
+task_3_1   task_3_2   task_1_1   task_1_2   task_2_1   task_2_2   
+279        7302       5509       5509       3137       4637       
+
 =============test_3e_6t done=============
 
 =============test_2e_8t=============
-Cargo PID: 26091
+Cargo PID: 52160
 Cargo command terminated due to inactivity.
-INFO  task_2_1 execute time:2296ms
-INFO  task_2_3 execute time:2834ms
-INFO  task_1_1 execute time:3892ms
-INFO  task_1_2 execute time:3893ms
-INFO  task_2_2 execute time:14850ms
-INFO  task_2_5 execute time:22451ms
-INFO  task_2_6 execute time:27300ms
-INFO  task_2_4 execute time:27300ms
+
+INFO  task_1_1 counted execute times: 720
+INFO  task_1_2 counted execute times: 180
+INFO  task_1_3 counted execute times: 1050
+INFO  task_1_4 counted execute times: 540
+INFO  task_2_1 counted execute times: 2150
+INFO  task_2_2 counted execute times: 540
+INFO  task_2_3 counted execute times: 3150
+INFO  task_2_4 counted execute times: 1620
+task_1_1   task_1_2   task_1_3   task_1_4   task_2_1   task_2_2   task_2_3   task_2_4   
+720        180        1050       540        2150       540        3150       1620       
 =============test_2e_8t done=============
 
 =============test_2e_20t=============
-Cargo PID: 26750
+Cargo PID: 52761
 Cargo command terminated due to inactivity.
 INFO  task_2_1 execute time:561ms
 INFO  task_1_1 execute time:560ms
@@ -55,5 +64,8 @@ INFO  task_1_7 execute time:12942ms
 INFO  task_1_8 execute time:15999ms
 INFO  task_1_9 execute time:16452ms
 INFO  task_1_10 execute time:19399ms
+task_2_6   task_2_7   task_1_10  task_2_8   task_2_9   task_1_1   task_2_10  task_1_2   task_1_3   task_1_4   task_1_5   task_1_6   task_2_1   task_1_7   task_2_2   task_1_8   task_2_3   task_1_9   task_2_4   task_2_5   
+3878       5081       19399      5609       6068       560        6609       3511       3940       6806       9702       10279      561        12942      1910       15999      2339       16452      2821       3312       
+
 =============test_2e_20t done=============
 
