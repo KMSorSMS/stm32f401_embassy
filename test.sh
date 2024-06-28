@@ -125,10 +125,11 @@ echo "=============Start testing=============" > record.yml
 
 # 定义一个数组，包含所有测试
 tests=(
-# "test_2e_4t" 
-# "test_3e_6t" 
-# "test_2e_8t" 
-# "test_2e_20t"
+"test_2e_4t" 
+"test_3e_6t" 
+"test_2e_8t" 
+"test_2e_20t"
+"test_3e_18t"
 "test_2e_6t"
 )
 

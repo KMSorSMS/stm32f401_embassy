@@ -1,4 +1,5 @@
 =============Start testing=============
+<<<<<<< HEAD
 =============test_2e_6t=============
 Cargo PID: 66637
 Cargo command terminated due to inactivity.
@@ -764,4 +765,30 @@ INFO  task1 execute time:5831ms
 INFO  task0 execute time:5831ms
 INFO  ==========thread2 is scheduled==========
 =============test_2e_6t done=============
+
+=============test_3e_18t=============
+Cargo PID: 122394
+Cargo command terminated due to inactivity.
+
+INFO  task_2_6 counted execute times: 370
+INFO  task_3_1 counted execute times: 490
+INFO  task_3_2 counted execute times: 240
+INFO  task_3_3 counted execute times: 630
+INFO  task_1_1 counted execute times: 240
+INFO  task_3_4 counted execute times: 440
+INFO  task_1_2 counted execute times: 120
+INFO  task_3_5 counted execute times: 440
+INFO  task_3_6 counted execute times: 240
+INFO  task_1_3 counted execute times: 310
+INFO  task_1_4 counted execute times: 220
+INFO  task_1_5 counted execute times: 220
+INFO  task_1_6 counted execute times: 120
+INFO  task_2_1 counted execute times: 740
+INFO  task_2_2 counted execute times: 370
+INFO  task_2_3 counted execute times: 940
+INFO  task_2_4 counted execute times: 660
+INFO  task_2_5 counted execute times: 660
+task_2_6   task_3_1   task_3_2   task_3_3   task_1_1   task_3_4   task_1_2   task_3_5   task_3_6   task_1_3   task_1_4   task_1_5   task_1_6   task_2_1   task_2_2   task_2_3   task_2_4   task_2_5   
+370        490        240        630        240        440        120        440        240        310        220        220        120        740        370        940        660        660        
+=============test_3e_18t done=============
 
