@@ -57,12 +57,26 @@ run_test() {
     done
 
     # 继续执行脚本的其他部分
-    # 得到程序执行时间的信息
-    cat tmp.yaml | grep -E "task(_[0-9]+)* execute time"
+    # 得到程序执行时间的信息task[0-9]+ *counted *execute *times:
+    cat tmp.yaml | grep -E "((=)*task((_[0-9]+)*|[0-9]+) execute time(=)*)|((=)*thread[0-9]+ is scheduled(=)*)" 
+    # #直接打印协程调度信息
+    # awk '
+    # /INFO  task[0-9]+ *execute *time:/ {
+    #     # 使用正则表达式匹配task名称和执行次数
+    #     match($0, /(task[0-9]+) *execute *time/, arr)
+    #     printf("===========%s is polled===========\n",arr[1])
+    # }' tmp.yaml
+    # #直接打印线程调度信息
+    # awk '
+    # /INFO  thread[0-9]+ *is *scheduled/ {
+    #     match($0, /(thread[0-9]+) *is *scheduled/, arr)
+    #     # 输出线程被调度的信息
+    #     printf("==========%s is scheduled===========\n",arr[1])
+    # }' tmp.yaml
     awk '
     /INFO  task(_[0-9]+)* *execute *time/ {
         # 使用正则表达式匹配task名称和执行次数
-        match($0, /(task(_[0-9]+)*) *execute *time: *([0-9]+)/, arr)
+        match($0, /(task(_[0-9]+)* *execute *time: *([0-9]+)/, arr)
         # 使用task名称作为键,存储执行次数
         tasks[arr[1]] = arr[3]
     }
@@ -84,7 +98,7 @@ run_test() {
     awk '
     /INFO  task(_[0-9]+)* *counted *execute *times:/ {
         # 使用正则表达式匹配task名称和执行次数
-        match($0, /(task(_[0-9]+)*) *counted *execute *times: *([0-9]+)/, arr)
+        match($0, /(task(_[0-9]+)* *counted *execute *times: *([0-9]+)/, arr)
         # 使用task名称作为键,存储执行次数
         tasks[arr[1]] = arr[3]
     }
@@ -104,19 +118,18 @@ run_test() {
         }
         # 换行
         printf("\n") 
-    }
-' tmp.yaml
-
+    }' tmp.yaml
 }
 clear
 echo "=============Start testing=============" > record.yml
 
 # 定义一个数组，包含所有测试
 tests=(
-"test_2e_4t" 
-"test_3e_6t" 
-"test_2e_8t" 
-"test_2e_20t"
+# "test_2e_4t" 
+# "test_3e_6t" 
+# "test_2e_8t" 
+# "test_2e_20t"
+"test_2e_6t"
 )
 
 # 循环遍历数组，执行测试

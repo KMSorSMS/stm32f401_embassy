@@ -57,6 +57,11 @@ pub fn os_start() -> ! {
             let _os_prio_high_rdy = OS_PRIO_HIGH_RDY;
             let _os_prio_cur = OS_PRIO_CUR;
             info!("OS_PRIO_HIGH_RDY: {}", OS_PRIO_HIGH_RDY);
+            if OS_PRIO_HIGH_RDY==3 {
+                info!("==========thread2 is scheduled==========");
+            }else if OS_PRIO_HIGH_RDY==43{
+                info!("==========thread1 is scheduled==========");
+            }
             OSStartHighRdy()
         }
     } else {
@@ -268,7 +273,12 @@ fn os_sched_new() {
                     }
                     ptr = (*ptr).ostcb_next.unwrap();
                 }
-                // info!("in os_sched_new, the piro is {}", OS_PRIO_HIGH_RDY);
+                
+                if OS_PRIO_HIGH_RDY==3 {
+                    info!("==========thread2 is scheduled==========");
+                }else if OS_PRIO_HIGH_RDY==43{
+                    info!("==========thread1 is scheduled==========");
+                }
                 // info!("in os_sched_new, the stride is {}", min_stride);
             }
         });
