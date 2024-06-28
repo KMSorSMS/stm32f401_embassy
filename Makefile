@@ -4,8 +4,8 @@ DEVICE = STM32F401RE
 MODE ?= release
 # use command rust-nm -S target/thumbv7em-none-eabi/release/stm32f401_embassy | grep RTT ,to get the address of RTT
 # the command's output is 20000000 00000030 D _SEGGER_RTT
-RTT_ADDR := $(shell rust-nm -S target/$(PLATFORM)/$(MODE)/$(TARGET) | grep RTT | awk '{print $$1}')
-RTT_SIZE := $(shell rust-nm -S target/$(PLATFORM)/$(MODE)/$(TARGET) | grep RTT | awk '{print $$2}')
+RTT_ADDR := $(shell rust-nm -S target/$(PLATFORM)/$(MODE)/$(TARGET) 2>/dev/null | grep RTT | awk '{print $$1}')
+RTT_SIZE := $(shell rust-nm -S target/$(PLATFORM)/$(MODE)/$(TARGET) 2>/dev/null | grep RTT | awk '{print $$2}')
 PORT := 8765
 
 FILE_ELF := target/$(PLATFORM)/$(MODE)/$(TARGET)

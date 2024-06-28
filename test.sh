@@ -58,7 +58,11 @@ run_test() {
 
     # 继续执行脚本的其他部分
     # 得到程序执行时间的信息task[0-9]+ *counted *execute *times:
-    cat tmp.yaml | grep -E "((=)*task((_[0-9]+)*|[0-9]+) execute time(=)*)|((=)*thread[0-9]+ is scheduled(=)*)" 
+    if [[ $test_name == *thread ]]; then
+        cat tmp.yaml | grep -E "((=)*task((_[0-9]+)*|[0-9]+) execute time(=)*)|((=)*thread[0-9]+ is scheduled(=)*)" 
+    else
+        cat tmp.yaml | grep -E "task(_[0-9]+)* *execute *time"
+    fi
     # #直接打印协程调度信息
     # awk '
     # /INFO  task[0-9]+ *execute *time:/ {
@@ -76,7 +80,7 @@ run_test() {
     awk '
     /INFO  task(_[0-9]+)* *execute *time/ {
         # 使用正则表达式匹配task名称和执行次数
-        match($0, /(task(_[0-9]+)* *execute *time: *([0-9]+)/, arr)
+        match($0, /(task(_[0-9]+)*) *execute *time: *([0-9]+)/, arr)
         # 使用task名称作为键,存储执行次数
         tasks[arr[1]] = arr[3]
     }
@@ -98,7 +102,7 @@ run_test() {
     awk '
     /INFO  task(_[0-9]+)* *counted *execute *times:/ {
         # 使用正则表达式匹配task名称和执行次数
-        match($0, /(task(_[0-9]+)* *counted *execute *times: *([0-9]+)/, arr)
+        match($0, /(task(_[0-9]+)*) *counted *execute *times: *([0-9]+)/, arr)
         # 使用task名称作为键,存储执行次数
         tasks[arr[1]] = arr[3]
     }
@@ -130,7 +134,7 @@ tests=(
 "test_2e_8t" 
 "test_2e_20t"
 "test_3e_18t"
-"test_2e_6t"
+"test_2e_6t_thread"
 )
 
 # 循环遍历数组，执行测试
