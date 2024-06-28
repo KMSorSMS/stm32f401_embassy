@@ -3,14 +3,14 @@
 // #![feature(impl_trait_in_assoc_type)]
 // use the asm code.
 // the rust version of uc's thread part
-#[path ="../uc_thread/mod.rs"]
+#[path = "../uc_thread/mod.rs"]
 pub mod uc_thread;
 
 use cortex_m_rt::entry;
 use defmt::*;
 use embassy_executor::Executor;
 use embassy_stm32::rcc::Pll;
-use embassy_time::{Instant, Timer};
+use embassy_time::Timer;
 use static_cell::StaticCell;
 use stm32_metapac::rcc::vals;
 use uc_thread::{os_init, os_start, os_task_create, systick_init, OsStk};
@@ -22,7 +22,17 @@ const TASK1_STK_SIZE: usize = 512;
 const TASK2_STK_SIZE: usize = 512;
 static mut TASK1_STK: [OsStk; TASK1_STK_SIZE] = [0; TASK1_STK_SIZE];
 static mut TASK2_STK: [OsStk; TASK2_STK_SIZE] = [0; TASK2_STK_SIZE];
-const LIMIT_TIME:usize = 25;
+// const LIMIT_TIME:usize = 25;
+const PRINT_TIME: usize = 10;
+// unit is ms
+const LONG_SYSCALL_TIME: u64 = 45;
+const MID_SYSCALL_TIME: u64 = 15;
+const SHORT_SYSCALL_TIME: u64 = 5;
+// unit is ms
+const LONG_CALCULATE_TIME: u64 = 200;
+const MID_CALCULATE_TIME: u64 = 100;
+const SHORT_CALCULATE_TIME: u64 = 80;
+const VERY_SHORT_CALCULATE_TIME: u64 = 70;
 
 #[entry]
 fn main() -> ! {
@@ -56,265 +66,188 @@ fn main() -> ! {
     info!("Hello World!");
     os_init();
     info!("task_1");
-    unsafe{os_task_create(task_1, &mut TASK1_STK[TASK1_STK_SIZE-1], 43);}
+    unsafe {
+        os_task_create(task_1, &mut TASK1_STK[TASK1_STK_SIZE - 1], 43);
+    }
     info!("task_2");
-    unsafe{os_task_create(task_2, &mut TASK2_STK[TASK2_STK_SIZE-1], 3);}
+    unsafe {
+        os_task_create(task_2, &mut TASK2_STK[TASK2_STK_SIZE - 1], 3);
+    }
     os_start()
 }
 
 fn task_1() {
     let executor = EXECUTOR_LOW1.init(Executor::new());
     executor.run(|spawner| {
-        unwrap!(spawner.spawn(blink2()));
-        unwrap!(spawner.spawn(blink1()));
-        unwrap!(spawner.spawn(dead_task1()));
+        unwrap!(spawner.spawn(mock_task2()));
+        unwrap!(spawner.spawn(mock_task1()));
+        unwrap!(spawner.spawn(mock_task3()));
+        unwrap!(spawner.spawn(mock_task4()));
+        // unwrap!(spawner.spawn(dead_task1()));
     });
 }
 
 fn task_2() {
     let executor = EXECUTOR_LOW2.init(Executor::new());
     executor.run(|spawner| {
-        unwrap!(spawner.spawn(blink3()));
-        unwrap!(spawner.spawn(blink4()));
-        unwrap!(spawner.spawn(blink5()));
-        unwrap!(spawner.spawn(blink6()));
-        unwrap!(spawner.spawn(blink7()));
-        unwrap!(spawner.spawn(blink8()));
-        unwrap!(spawner.spawn(dead_task2()));
+        unwrap!(spawner.spawn(mock_task5()));
+        unwrap!(spawner.spawn(mock_task6()));
+        unwrap!(spawner.spawn(mock_task7()));
+        unwrap!(spawner.spawn(mock_task8()));
+        // unwrap!(spawner.spawn(dead_task2()));
     });
 }
 
+// #[embassy_executor::task]
+// async fn dead_task1() {
+//     loop {
+//         Timer::after_millis(SHORT_SYSCALL_TIME).await;
+//         block_delay(100);
+//     }
+// }
+
+// #[embassy_executor::task]
+// async fn dead_task2() {
+//     loop {
+//         Timer::after_millis(SHORT_SYSCALL_TIME).await;
+//         block_delay(100);
+//     }
+// }
 
 #[embassy_executor::task]
-async fn dead_task1() {
-        loop{
-        Timer::after_millis(3).await;
-        block_delay(100);
-    }
-}
-
-#[embassy_executor::task]
-async fn dead_task2() {
-        loop{
-        Timer::after_millis(3).await;
-        block_delay(100);
-    }
-}
-
-#[embassy_executor::task]
-async fn blink1() {
-    let mut count1_times:usize = 0;
-    let start = Instant::now();
+async fn mock_task1() {
+    let mut count1_times: usize = 0;
     loop {
         count1_times += 1;
-        info!("high1");
-        // led.set_high();
-        Timer::after_millis(30).await;
-        // block_delay(1000);
-
-        info!("low1");
-        // led.set_low();
-        Timer::after_millis(30).await;
-        // block_delay(1000);
-        if count1_times >= LIMIT_TIME {
-            break;
+        Timer::after_millis(MID_SYSCALL_TIME).await;
+        block_delay(VERY_SHORT_CALCULATE_TIME);
+        Timer::after_millis(SHORT_SYSCALL_TIME).await;
+        block_delay(VERY_SHORT_CALCULATE_TIME);
+        // 进行模10，每10次打印一次执行次数
+        if count1_times % PRINT_TIME == 0 {
+            info!("task_1_1 counted execute times:{}", count1_times);
         }
     }
-    let end = Instant::now();
-    let ms = end.duration_since(start).as_millis();
-    info!("task_1_1 end with times:{}", count1_times);
-    info!("task_1_1 execute time:{}ms", ms);
 }
 
 #[embassy_executor::task]
-async fn blink2() {
-    let mut count2_times:usize = 0;
-    let start = Instant::now();
+async fn mock_task2() {
+    let mut count2_times: usize = 0;
     loop {
         count2_times += 1;
-        info!("high2");
-        // led.set_high();
-        Timer::after_millis(30).await;
-        // block_delay(100);
-
-        info!("low2");
-        // led.set_low();
-        // block_delay(100);
-        Timer::after_millis(30).await;
-        if count2_times >= LIMIT_TIME{
-            break;
+        Timer::after_millis(LONG_SYSCALL_TIME).await;
+        block_delay(LONG_CALCULATE_TIME);
+        Timer::after_millis(LONG_SYSCALL_TIME).await;
+        block_delay(LONG_CALCULATE_TIME);
+        if count2_times % PRINT_TIME == 0 {
+            info!("task_1_2 counted execute times:{}", count2_times);
         }
     }
-    let end = Instant::now();
-    let ms = end.duration_since(start).as_millis();
-    info!("task_1_2 end with times:{}", count2_times);
-    info!("task_1_2 execute time:{}ms", ms);
 }
 
 #[embassy_executor::task]
-async fn blink3() {
+async fn mock_task3() {
     // record it's execute time
-    let mut count3_times:usize = 0;
-    let start = Instant::now();
+    let mut count3_times: usize = 0;
     loop {
         count3_times += 1;
-        info!("high3");
-        // led.set_high();
-        Timer::after_millis(30).await;
-        // block_delay(1000);
-        info!("low3");
-        // led.set_low();
-        Timer::after_millis(30).await;
-        // block_delay(1000);
-        if count3_times >= LIMIT_TIME {
-            break;
+        Timer::after_millis(SHORT_SYSCALL_TIME).await;
+        block_delay(SHORT_CALCULATE_TIME);
+        Timer::after_millis(SHORT_SYSCALL_TIME).await;
+        block_delay(SHORT_CALCULATE_TIME);
+        if count3_times % PRINT_TIME == 0 {
+            info!("task_1_3 counted execute times:{}", count3_times);
         }
     }
-    let end = Instant::now();
-    let ms = end.duration_since(start).as_millis();
-    info!("task_2_1 end with times:{}", count3_times);
-    info!("task_2_1 execute time:{}ms", ms);
 }
 
 #[embassy_executor::task]
-async fn blink4() {
-    let mut count4_times:usize = 0;
-    let start = Instant::now();
+async fn mock_task4() {
+    let mut count4_times: usize = 0;
     loop {
         count4_times += 1;
-        info!("high4");
-        // led.set_high();
-        Timer::after_millis(150).await;
-        // block_delay(100);
-
-        info!("low4");
-        // led.set_low();
-        // block_delay(100);
-        Timer::after_millis(300).await;
-        if count4_times >= LIMIT_TIME{
-            break;
+        Timer::after_millis(MID_SYSCALL_TIME).await;
+        block_delay(MID_CALCULATE_TIME);
+        Timer::after_millis(MID_SYSCALL_TIME).await;
+        block_delay(MID_CALCULATE_TIME);
+        if count4_times % PRINT_TIME == 0 {
+            info!("task_1_4 counted execute times:{}", count4_times);
         }
     }
-    let end = Instant::now();
-    let ms = end.duration_since(start).as_millis();
-    info!("task_2_2 end with times:{}", count4_times);
-    info!("task_2_2 execute time:{}ms", ms);
 }
 
 #[embassy_executor::task]
-async fn blink5() {
+async fn mock_task5() {
     // record it's execute time
-    let mut count5_times:usize = 0;
-    let start = Instant::now();
+    let mut count5_times: usize = 0;
     loop {
         count5_times += 1;
-        info!("high5");
-        // led.set_high();
-        Timer::after_millis(30).await;
-        // block_delay(1000);
-        info!("low5");
-        // led.set_low();
-        Timer::after_millis(50).await;
-        // block_delay(1000);
-        if count5_times >= LIMIT_TIME {
-            break;
+        Timer::after_millis(MID_SYSCALL_TIME).await;
+        block_delay(VERY_SHORT_CALCULATE_TIME);
+        Timer::after_millis(SHORT_SYSCALL_TIME).await;
+        block_delay(VERY_SHORT_CALCULATE_TIME);
+        if count5_times % PRINT_TIME == 0 {
+            info!("task_2_1 counted execute times:{}", count5_times);
         }
     }
-    let end = Instant::now();
-    let ms = end.duration_since(start).as_millis();
-    info!("task_2_3 end with times:{}", count5_times);
-    info!("task_2_3 execute time:{}ms", ms);
 }
 
-
 #[embassy_executor::task]
-async fn blink6() {
+async fn mock_task6() {
     // record it's execute time
-    let mut count6_times:usize = 0;
-    let start = Instant::now();
+    let mut count6_times: usize = 0;
     loop {
         count6_times += 1;
-        info!("high6");
-        // led.set_high();
-        Timer::after_millis(900).await;
-        // block_delay(1000);
-        info!("low6");
-        // led.set_low();
-        Timer::after_millis(100).await;
-        // block_delay(1000);
-        if count6_times >= LIMIT_TIME {
-            break;
+        Timer::after_millis(LONG_SYSCALL_TIME).await;
+        block_delay(LONG_CALCULATE_TIME);
+        Timer::after_millis(LONG_SYSCALL_TIME).await;
+        block_delay(LONG_CALCULATE_TIME);
+        if count6_times % PRINT_TIME == 0 {
+            info!("task_2_2 counted execute times:{}", count6_times);
         }
     }
-    let end = Instant::now();
-    let ms = end.duration_since(start).as_millis();
-    info!("task_2_4 end with times:{}", count6_times);
-    info!("task_2_4 execute time:{}ms", ms);
 }
 
-
 #[embassy_executor::task]
-async fn blink7() {
+async fn mock_task7() {
     // record it's execute time
-    let mut count7_times:usize = 0;
-    let start = Instant::now();
+    let mut count7_times: usize = 0;
     loop {
         count7_times += 1;
-        info!("high7");
-        // led.set_high();
-        Timer::after_millis(600).await;
-        // block_delay(1000);
-        info!("low7");
-        // led.set_low();
-        Timer::after_millis(150).await;
-        // block_delay(1000);
-        if count7_times >= LIMIT_TIME {
-            break;
+        Timer::after_millis(SHORT_SYSCALL_TIME).await;
+        block_delay(SHORT_CALCULATE_TIME);
+        Timer::after_millis(SHORT_SYSCALL_TIME).await;
+        block_delay(SHORT_CALCULATE_TIME);
+        if count7_times % PRINT_TIME == 0 {
+            info!("task_2_3 counted execute times:{}", count7_times);
         }
     }
-    let end = Instant::now();
-    let ms = end.duration_since(start).as_millis();
-    info!("task_2_5 end with times:{}", count7_times);
-    info!("task_2_5 execute time:{}ms", ms);
 }
-
 
 #[embassy_executor::task]
-async fn blink8() {
+async fn mock_task8() {
     // record it's execute time
-    let mut count8_times:usize = 0;
-    let start = Instant::now();
+    let mut count8_times: usize = 0;
     loop {
         count8_times += 1;
-        info!("high8");
-        // led.set_high();
-        Timer::after_millis(900).await;
-        // block_delay(1000);
-        info!("low8");
-        // led.set_low();
-        Timer::after_millis(100).await;
-        // block_delay(1000);
-        if count8_times >= LIMIT_TIME {
-            break;
+        Timer::after_millis(MID_SYSCALL_TIME).await;
+        block_delay(MID_CALCULATE_TIME);
+        Timer::after_millis(MID_SYSCALL_TIME).await;
+        block_delay(MID_CALCULATE_TIME);
+        if count8_times % PRINT_TIME == 0 {
+            info!("task_2_4 counted execute times:{}", count8_times);
         }
     }
-    let end = Instant::now();
-    let ms = end.duration_since(start).as_millis();
-    info!("task_2_6 end with times:{}", count8_times);
-    info!("task_2_6 execute time:{}ms", ms);
 }
 
-
-
-
 #[allow(unused)]
-fn block_delay(tick: u32){
+fn block_delay(tick: u64) {
     let mut i = 0;
     let mut j = 0;
     while i < tick {
         i += 1;
-        while j < tick*tick {
+        while j < tick * tick {
             j += 1;
         }
     }
-} 
+}
