@@ -59,7 +59,12 @@ clear
 echo "=============Start testing=============" > record.yml
 
 # 定义一个数组，包含所有测试
-tests=("test_2e_4t" "test_3e_6t" "test_2e_8t" "test_2e_20t")
+tests=(
+"test_2e_4t" 
+# "test_3e_6t" 
+# "test_2e_8t" 
+# "test_2e_20t"
+)
 
 # 循环遍历数组，执行测试
 for test in "${tests[@]}"; do
