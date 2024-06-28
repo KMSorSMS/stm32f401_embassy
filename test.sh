@@ -22,6 +22,10 @@ run_test() {
     # 最大等待时间（秒）
     MAX_WAIT=3
     WAITED=0
+    # 单次测试最长执行时间
+    MAX_TIME=90
+    # 记录总时间
+    TOTAL_TIME=0
     # # 查找并终止probe-rs run进程
     # sleep 2
     # PROBE_RS_PID=$(pgrep -f "probe-rs")
@@ -31,22 +35,23 @@ run_test() {
     CURRENT_SIZE=$(stat -c %s tmp.yaml 2>/dev/null || echo "0")
         # 只有当前文件大小非0才监测
     if [ "$CURRENT_SIZE" -ne 0 ]; then
-    # 检查文件大小是否有变化
-    if [ "$CURRENT_SIZE" -eq "$PREV_SIZE" ]; then
-        if [ "$WAITED" -ge "$MAX_WAIT" ]; then
-        # 文件大小在指定时间内没有变化，终止cargo命令
-        kill $CARGO_PID
-        echo "Cargo command terminated due to inactivity."
-        break
+        # 检查文件大小是否有变化
+        if [ "$CURRENT_SIZE" -eq "$PREV_SIZE" ] || [ "$TOTAL_TIME" -ge "$MAX_TIME" ]; then
+            if [ "$WAITED" -ge "$MAX_WAIT" ] || [ "$TOTAL_TIME" -ge "$MAX_TIME" ]; then
+            # 文件大小在指定时间内没有变化，终止cargo命令
+            kill $CARGO_PID
+            echo "Cargo command terminated due to inactivity."
+            break
+            else
+            # 等待更长时间
+            ((WAITED+=INTERVAL))
+            fi
         else
-        # 等待更长时间
-        ((WAITED+=INTERVAL))
+            # 文件大小有变化，重置等待时间
+            WAITED=0
         fi
-    else
-        # 文件大小有变化，重置等待时间
-        WAITED=0
-    fi
-    PREV_SIZE=$CURRENT_SIZE
+        PREV_SIZE=$CURRENT_SIZE
+        ((TOTAL_TIME+=INTERVAL))
     fi
     sleep $INTERVAL
     done
@@ -54,15 +59,32 @@ run_test() {
     # 继续执行脚本的其他部分
     # 得到程序执行时间的信息
     cat tmp.yaml | grep -E "task(_[0-9]+)* execute time"
+    # 需要捕获各个task最新打印的task(_[0-9]+)* counted execute times:
+    # 需要捕获各个task最新的打印，也就是先按照task名字进行分组，然后选取各个组里面最后一个
+    awk '
+    /INFO  task(_[0-9]+)* counted execute times:/ {
+        # 使用正则表达式匹配task名称和执行次数
+        match($0, /(task(_[0-9]+)*) counted execute times: *([0-9]+)/, arr)
+        # 使用task名称作为键,存储执行次数
+        tasks[arr[1]] = arr[3]
+    }
+    END {
+        # 遍历数组,打印每个task的最后一次执行次数
+        for (task in tasks) {
+            print task " counted execute times: " tasks[task]
+        }
+    }
+' tmp.yaml
+
 }
 clear
 echo "=============Start testing=============" > record.yml
 
 # 定义一个数组，包含所有测试
 tests=(
-"test_2e_4t" 
+# "test_2e_4t" 
 # "test_3e_6t" 
-# "test_2e_8t" 
+"test_2e_8t" 
 # "test_2e_20t"
 )
 

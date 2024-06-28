@@ -1,10 +1,14 @@
 =============Start testing=============
-=============test_2e_4t=============
-Cargo PID: 8567
+=============test_2e_8t=============
+Cargo PID: 39001
 Cargo command terminated due to inactivity.
-INFO  task_2_1 execute time:271ms
-INFO  task_2_2 execute time:354ms
-INFO  task_1_1 execute time:960ms
-INFO  task_1_2 execute time:960ms
-=============test_2e_4t done=============
+task_1_1 counted execute times: 420
+task_1_2 counted execute times: 420
+task_1_3 counted execute times: 420
+task_1_4 counted execute times: 420
+task_2_1 counted execute times: 1960
+task_2_2 counted execute times: 630
+task_2_3 counted execute times: 1020
+task_2_4 counted execute times: 1570
+=============test_2e_8t done=============
 
