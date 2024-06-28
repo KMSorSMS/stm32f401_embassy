@@ -1,71 +1,97 @@
 =============Start testing=============
 =============test_2e_4t=============
-Cargo PID: 51576
+Cargo PID: 120864
 Cargo command terminated due to inactivity.
-INFO  task_2_1 execute time:204ms
-INFO  task_2_2 execute time:273ms
-INFO  task_1_1 execute time:273ms
-INFO  task_1_2 execute time:273ms
+INFO  task_2_1 execute time:286ms
+INFO  task_2_2 execute time:357ms
+INFO  task_1_1 execute time:996ms
+INFO  task_1_2 execute time:996ms
 task_1_1   task_1_2   task_2_1   task_2_2   
-273        273        204        273        
+996        996        286        357        
 
 =============test_2e_4t done=============
 
 =============test_3e_6t=============
-Cargo PID: 51795
+Cargo PID: 121167
 Cargo command terminated due to inactivity.
-INFO  task_3_1 execute time:279ms
-INFO  task_2_1 execute time:3137ms
-INFO  task_2_2 execute time:4637ms
-INFO  task_1_1 execute time:5509ms
-INFO  task_1_2 execute time:5509ms
-INFO  task_3_2 execute time:7302ms
+INFO  task_3_1 execute time:756ms
+INFO  task_2_1 execute time:2701ms
+INFO  task_2_2 execute time:4078ms
+INFO  task_3_2 execute time:6010ms
+INFO  task_1_1 execute time:7742ms
+INFO  task_1_2 execute time:7742ms
 task_3_1   task_3_2   task_1_1   task_1_2   task_2_1   task_2_2   
-279        7302       5509       5509       3137       4637       
+756        6010       7742       7742       2701       4078       
 
 =============test_3e_6t done=============
 
 =============test_2e_8t=============
-Cargo PID: 52160
+Cargo PID: 121457
 Cargo command terminated due to inactivity.
 
-INFO  task_1_1 counted execute times: 720
-INFO  task_1_2 counted execute times: 180
-INFO  task_1_3 counted execute times: 1050
-INFO  task_1_4 counted execute times: 540
-INFO  task_2_1 counted execute times: 2150
-INFO  task_2_2 counted execute times: 540
-INFO  task_2_3 counted execute times: 3150
-INFO  task_2_4 counted execute times: 1620
+INFO  task_1_1 counted execute times: 440
+INFO  task_1_2 counted execute times: 140
+INFO  task_1_3 counted execute times: 560
+INFO  task_1_4 counted execute times: 300
+INFO  task_2_1 counted execute times: 1250
+INFO  task_2_2 counted execute times: 340
+INFO  task_2_3 counted execute times: 1840
+INFO  task_2_4 counted execute times: 940
 task_1_1   task_1_2   task_1_3   task_1_4   task_2_1   task_2_2   task_2_3   task_2_4   
-720        180        1050       540        2150       540        3150       1620       
+440        140        560        300        1250       340        1840       940        
 =============test_2e_8t done=============
 
 =============test_2e_20t=============
-Cargo PID: 52761
+Cargo PID: 121926
 Cargo command terminated due to inactivity.
-INFO  task_2_1 execute time:561ms
-INFO  task_1_1 execute time:560ms
-INFO  task_2_2 execute time:1910ms
-INFO  task_2_3 execute time:2339ms
-INFO  task_2_4 execute time:2821ms
-INFO  task_2_5 execute time:3312ms
-INFO  task_2_6 execute time:3878ms
-INFO  task_1_2 execute time:3511ms
-INFO  task_1_3 execute time:3940ms
-INFO  task_2_7 execute time:5081ms
-INFO  task_2_8 execute time:5609ms
-INFO  task_2_9 execute time:6068ms
-INFO  task_2_10 execute time:6609ms
-INFO  task_1_4 execute time:6806ms
-INFO  task_1_5 execute time:9702ms
-INFO  task_1_6 execute time:10279ms
-INFO  task_1_7 execute time:12942ms
-INFO  task_1_8 execute time:15999ms
-INFO  task_1_9 execute time:16452ms
-INFO  task_1_10 execute time:19399ms
+INFO  task_2_1 execute time:696ms
+INFO  task_2_2 execute time:1459ms
+INFO  task_2_3 execute time:1970ms
+INFO  task_1_1 execute time:1974ms
+INFO  task_2_4 execute time:2719ms
+INFO  task_2_5 execute time:3191ms
+INFO  task_1_2 execute time:3883ms
+INFO  task_2_6 execute time:3998ms
+INFO  task_2_7 execute time:3999ms
+INFO  task_1_3 execute time:5182ms
+INFO  task_2_8 execute time:5358ms
+INFO  task_2_9 execute time:5369ms
+INFO  task_2_10 execute time:5380ms
+INFO  task_1_4 execute time:7999ms
+INFO  task_1_5 execute time:7999ms
+INFO  task_1_6 execute time:8000ms
+INFO  task_1_7 execute time:8000ms
+INFO  task_1_10 execute time:15999ms
+INFO  task_1_9 execute time:15999ms
+INFO  task_1_8 execute time:16000ms
 task_2_6   task_2_7   task_1_10  task_2_8   task_2_9   task_1_1   task_2_10  task_1_2   task_1_3   task_1_4   task_1_5   task_1_6   task_2_1   task_1_7   task_2_2   task_1_8   task_2_3   task_1_9   task_2_4   task_2_5   
-3878       5081       19399      5609       6068       560        6609       3511       3940       6806       9702       10279      561        12942      1910       15999      2339       16452      2821       3312       
+3998       3999       15999      5358       5369       1974       5380       3883       5182       7999       7999       8000       696        8000       1459       16000      1970       15999      2719       3191       
 
 =============test_2e_20t done=============
+
+=============test_3e_18t=============
+Cargo PID: 122394
+Cargo command terminated due to inactivity.
+
+INFO  task_2_6 counted execute times: 370
+INFO  task_3_1 counted execute times: 490
+INFO  task_3_2 counted execute times: 240
+INFO  task_3_3 counted execute times: 630
+INFO  task_1_1 counted execute times: 240
+INFO  task_3_4 counted execute times: 440
+INFO  task_1_2 counted execute times: 120
+INFO  task_3_5 counted execute times: 440
+INFO  task_3_6 counted execute times: 240
+INFO  task_1_3 counted execute times: 310
+INFO  task_1_4 counted execute times: 220
+INFO  task_1_5 counted execute times: 220
+INFO  task_1_6 counted execute times: 120
+INFO  task_2_1 counted execute times: 740
+INFO  task_2_2 counted execute times: 370
+INFO  task_2_3 counted execute times: 940
+INFO  task_2_4 counted execute times: 660
+INFO  task_2_5 counted execute times: 660
+task_2_6   task_3_1   task_3_2   task_3_3   task_1_1   task_3_4   task_1_2   task_3_5   task_3_6   task_1_3   task_1_4   task_1_5   task_1_6   task_2_1   task_2_2   task_2_3   task_2_4   task_2_5   
+370        490        240        630        240        440        120        440        240        310        220        220        120        740        370        940        660        660        
+=============test_3e_18t done=============
 

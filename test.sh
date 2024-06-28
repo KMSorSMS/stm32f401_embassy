@@ -117,6 +117,7 @@ tests=(
 "test_3e_6t" 
 "test_2e_8t" 
 "test_2e_20t"
+"test_3e_18t"
 )
 
 # 循环遍历数组，执行测试
